@@ -1,0 +1,8 @@
+# congit file for API)ID and API_HASH
+config.py
+
+# file to store bot credential for googleSheet
+secret-key.json
+
+# file to store user-authentication details
+*.session
