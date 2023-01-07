@@ -1,14 +1,16 @@
+import sys
+sys.path.append('..')
 from pyrogram import Client
-import pyrogram
+import config
 import datetime
 import json
 app = Client(
     "YOUR_BOT",
-    api_id='29216885',
-    api_hash='99edbf3555814eede3496f758c30ec3c',
+    api_id = config.API_ID,
+    api_hash = config.API_HASH,
 )
-yesterday = datetime.date.today() - datetime.timedelta(days=1)
 TARGET='jobcoach_kannada'
+yesterday = datetime.date.today() - datetime.timedelta(days=1)
 messageList=[]
 async def main():
     async with app:
