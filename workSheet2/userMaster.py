@@ -1,3 +1,5 @@
+import sys
+sys.path.append('..')
 from pyrogram import Client
 import config
 import datetime
@@ -16,13 +18,14 @@ async def main():
         async for member in app.get_chat_members(TARGET):
             member=json.loads(str(member))
             User_ID=member['user'].get('id')
-            User_Name=member['user'].get('username',member['user'].get('first_name','NOT_AVAILABLE'))
+            User_Name=member['user'].get('username','NOT_AVL')
+            Full_Name=member['user'].get('first_name','')+' '+member['user'].get('last_name','')
             Date_of_Joining=member.get('joined_date').split(' ')[0]
             Date_of_Leaving='NILL_FOR_NOW'
             Last_Seen=member['user'].get('status','A.NOT_AVILABLE').split('.')[1]
             if 'last_online_date' in member.get('user'):
                 Last_Seen=member['user'].get('last_online_date','A NOT_AVILABLE').split(' ')[1]
-            userList.append([User_ID,User_Name,Date_of_Joining,Date_of_Leaving,Last_Seen])
+            userList.append([User_ID,Full_Name,User_Name,Date_of_Joining,Date_of_Leaving,Last_Seen])
 
 app.run(main())
 

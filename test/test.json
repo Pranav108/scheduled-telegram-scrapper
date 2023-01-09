@@ -1,0 +1,96 @@
+[
+  {
+    "_": "Message",
+    "id": 264,
+    "from_user": {
+      "_": "User",
+      "id": 1347086684,
+      "is_self": false,
+      "is_contact": false,
+      "is_mutual_contact": false,
+      "is_deleted": false,
+      "is_bot": false,
+      "is_verified": false,
+      "is_restricted": false,
+      "is_scam": false,
+      "is_fake": false,
+      "is_support": false,
+      "is_premium": false,
+      "first_name": "\u092e\u0948\u0902 \u0938\u092e\u092f",
+      "last_name": "\u0939\u0942\u0902",
+      "status": "UserStatus.RECENTLY"
+    },
+    "date": "2023-01-09 09:20:08",
+    "chat": {
+      "_": "Chat",
+      "id": -1001745014701,
+      "type": "ChatType.SUPERGROUP",
+      "is_verified": false,
+      "is_restricted": false,
+      "is_creator": false,
+      "is_scam": false,
+      "is_fake": false,
+      "title": "All exam GK",
+      "username": "Narendrasharma1235gk",
+      "photo": {
+        "_": "ChatPhoto",
+        "small_file_id": "AQADBQADqLAxGyNoQFcAEAIAA1MgWMMW____KTXHS4-YDrAABB4E",
+        "small_photo_unique_id": "AgADqLAxGyNoQFc",
+        "big_file_id": "AQADBQADqLAxGyNoQFcAEAMAA1MgWMMW____KTXHS4-YDrAABB4E",
+        "big_photo_unique_id": "AgADqLAxGyNoQFc"
+      },
+      "dc_id": 5,
+      "has_protected_content": false,
+      "permissions": {
+        "_": "ChatPermissions",
+        "can_send_messages": true,
+        "can_send_media_messages": true,
+        "can_send_other_messages": true,
+        "can_send_polls": true,
+        "can_add_web_page_previews": true,
+        "can_change_info": false,
+        "can_invite_users": true,
+        "can_pin_messages": false
+      }
+    },
+    "forward_from_chat": {
+      "_": "Chat",
+      "id": -1001313398733,
+      "type": "ChatType.CHANNEL",
+      "is_verified": false,
+      "is_restricted": false,
+      "is_creator": false,
+      "is_scam": false,
+      "is_fake": false,
+      "title": "VINDHYA\u2764\ufe0f",
+      "username": "rewamp1701",
+      "photo": {
+        "_": "ChatPhoto",
+        "small_file_id": "AQADBQADlLAxG4gAAbFVABACAAMzEBLdFv___7AwoA2Y9gigAAQeBA",
+        "small_photo_unique_id": "AgADlLAxG4gAAbFV",
+        "big_file_id": "AQADBQADlLAxG4gAAbFVABADAAMzEBLdFv___7AwoA2Y9gigAAQeBA",
+        "big_photo_unique_id": "AgADlLAxG4gAAbFV"
+      },
+      "dc_id": 5,
+      "has_protected_content": false
+    },
+    "forward_from_message_id": 605,
+    "forward_date": "2023-01-09 09:19:25",
+    "mentioned": false,
+    "scheduled": false,
+    "from_scheduled": false,
+    "has_protected_content": false,
+    "text": "You have two choices\u2026\n\n1. Live the life you\u2019re given.\n2. Build the life you deserve.",
+    "entities": [
+      {
+        "_": "MessageEntity",
+        "type": "MessageEntityType.BOLD",
+        "offset": 0,
+        "length": 84
+      }
+    ],
+    "views": 251,
+    "forwards": 2,
+    "outgoing": false
+  }
+]

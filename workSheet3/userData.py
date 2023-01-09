@@ -5,6 +5,7 @@ import config
 import datetime
 import gspread
 import json
+import re
 app = Client(
     "YOUR_BOT",
     api_id = config.API_ID,
@@ -15,10 +16,17 @@ todayDate = datetime.date.today()
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 userList=[]
 messageList=[]
-wordOfTheDay='loream_ipsum_dolar_sit'
+wordOfTheDay='NO_WORD_YET'
 userMap={}
+
 async def main():
     async with app:
+        async for member in app.get_chat_members(TARGET):
+            member=json.loads(str(member))
+            messageList.append(member['user'].get('id'))
+            for id in messageList:
+                userMap[id]=[yesterday.strftime("%x"),id,0,'N',0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
+        
         async for message in app.get_chat_history(TARGET): 
             # print(message)
             if(message.date.date()==todayDate):
@@ -26,24 +34,19 @@ async def main():
             if(message.date.date()<yesterday):
                 break
             message=json.loads(str(message))
-            if('text' in message):
+            if 'text' in message and 'sender_chat' not in message:
+                user_id=message['from_user'].get('id')
+                global wordOfTheDay
+                
                 # No._WCB_Participated
                 if(('from_user' in message) and message['from_user'].get('username')=="on9wordchainbot" and ('Turn order:' in message['text'])):
                     for el in message['entities']:
                         if 'user' in el:
-                            user_id=el['user'].get('id')
-                            if user_id in userMap:
-                                userMap[user_id][5]=userMap[user_id][5]+1
-                            else:
-                                userMap[user_id]=[yesterday.strftime("%x"),user_id,0,'NOT_AVAILABLE',0,1,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
+                            userMap[user_id][5]=userMap[user_id][5]+1
 
                 # No._WCB_Initiated
                 if '/start' in message['text'] and '@on9wordchainbot' in message['text']:
-                    user_id=message['from_user'].get('id')
-                    if user_id in userMap:
-                        userMap[user_id][4]=userMap[user_id][4]+1
-                    else:
-                        userMap[user_id]=[yesterday.strftime("%x"),user_id,0,'NOT_AVAILABLE',1,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
+                    userMap[user_id][4]=userMap[user_id][4]+1
                 
                 # Same logic as above two will be applied for JW bot
                 
@@ -53,20 +56,17 @@ async def main():
                 #     write logic to find if user userd wordOfTheDay
                 
                 # MessageCount
-                user_id=0
-                if 'from_user' in message:
-                    user_id=message['from_user'].get('id')
-                elif 'sender_chat' in message:
-                    print
-                    user_id=message['sender_chat'].get('id')
-                if user_id in userMap:
-                    userMap[user_id][2]=userMap[user_id][2]+1
-                else:
-                    userMap[user_id]=[yesterday.strftime("%x"),user_id,1,'NOT_AVAILABLE',0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
+                userMap[user_id][2]=userMap[user_id][2]+1
                 
-            # messageList.append(message)
-            
-
+                if wordOfTheDay == 'NO_WORD_YET':
+                    if 'Word of the day' in message['text']:
+                        m = re.search('_(.+?)_', message.get('text'))
+                        if m:
+                            wordOfTheDay=m.group(1)
+                else:
+                    if wordOfTheDay in message['text']:
+                        userMap[user_id][3]='Y'                    
+                
 app.run(main())
 
 userList=list(userMap.values())
@@ -83,7 +83,7 @@ worksheet = sh.get_worksheet(3)
 worksheet.append_rows(userList)
 
 # {
-#     user_id = [userid,...............]
-#     user_id = [userid,...............]
-#     user_id = [userid,...............]
+#     user_id = [date,userid,...............]
+#     user_id = [date,userid,...............]
+#     user_id = [date,userid,...............]
 # }
