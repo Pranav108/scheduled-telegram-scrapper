@@ -38,8 +38,7 @@ async def main():
             
             
         async for message in app.get_chat_history(TARGET): 
-            # print(message)
-            if(message.date.date()==todayDate):
+            if(message.date.date()>yesterday):
                 continue
             if(message.date.date()<yesterday):
                 break
@@ -47,8 +46,10 @@ async def main():
             if('text' in message):
                 if(('from_user' in message) and message['from_user'].get('username')=="on9wordchainbot" and ('Turn order:' in message['text'])):
                    WCBinitatedCount=WCBinitatedCount+1
-                if 'from_user' in message:
+                if 'from_user' in message :
                     userSet.add(message['from_user'].get('id'))
+                elif 'sender_chat' in message:
+                    userSet.add(message['sender_chat'].get('id'))
                 messageList.append(message)
 
 # Column for OFFLINE and ONLINE can also be add

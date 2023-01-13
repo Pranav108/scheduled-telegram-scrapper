@@ -12,7 +12,7 @@ app = Client(
     api_hash = config.API_HASH,
 )
 todayDate = datetime.date.today()
-yesterday = todayDate - datetime.timedelta(days=1)
+yesterday = todayDate - datetime.timedelta(days=3)
 TARGET='jobcoach_kannada'
 useFull=[0]*24
 indexAdder=messageSum=messageCount=botInitiatedCount=0
@@ -21,7 +21,7 @@ indexAdder=messageSum=messageCount=botInitiatedCount=0
 async def scrap():
     async with app:
         async for message in app.get_chat_history(TARGET):
-            if(message.date.date()==todayDate):
+            if(message.date.date()>yesterday):
                 continue
             if(message.date.date()<yesterday):
                 break
