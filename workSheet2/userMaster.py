@@ -70,7 +70,7 @@ result=makeList(userMap)
 # PUSHING to SHEET
 # Run this to ONLY to clear the left members data
 # gc = gspread.service_account(filename='../secret-key.json')
-# sh = gc.open_by_key('1M00XFS9THpS21bR0TStf6M2rzmnq23CnpXYU69xlW8I')
+# sh = gc.open_by_key('1uO7meUfKpn-qUYpOVhwofc1jW24Gmv0iNrkqw5OxgLk')
 # worksheet = sh.get_worksheet(2)
 # worksheet.append_rows(result)
 

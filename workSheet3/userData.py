@@ -39,7 +39,6 @@ async def main():
                 userMap[id]=[yesterday.strftime("%x"),id,0,'N',0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
         
         async for message in app.get_chat_history(TARGET): 
-            # print(message)
             if(message.date.date()>yesterday):
                 continue
             if(message.date.date()<yesterday):
@@ -69,7 +68,6 @@ async def main():
                 
                 # MessageCount
                 userMap[user_id][2]=userMap[user_id][2]+1
-                
                 if wordOfTheDay != 'NO_WORD_YET':
                     if wordOfTheDay in message['text'].casefold():
                         userMap[user_id][3]='Y'
@@ -85,7 +83,7 @@ with open('userData.json', "w") as file:
 
 # PUSHING to SHEET
 gc = gspread.service_account(filename='../secret-key.json')
-sh = gc.open_by_key('1M00XFS9THpS21bR0TStf6M2rzmnq23CnpXYU69xlW8I')
+sh = gc.open_by_key('1uO7meUfKpn-qUYpOVhwofc1jW24Gmv0iNrkqw5OxgLk')
 worksheet = sh.get_worksheet(3)
 worksheet.append_rows(userList)
 

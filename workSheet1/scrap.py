@@ -1,10 +1,9 @@
 import sys
-sys.path.append('..')
+import config
 from pyrogram import Client
 import datetime
 import gspread
 import json
-import config
 
 app = Client(
     "YOUR_BOT",
@@ -12,7 +11,7 @@ app = Client(
     api_hash = config.API_HASH,
 )
 todayDate = datetime.date.today()
-yesterday = todayDate - datetime.timedelta(days=3)
+yesterday = todayDate - datetime.timedelta(days=1)
 TARGET='jobcoach_kannada'
 useFull=[0]*24
 indexAdder=messageSum=messageCount=botInitiatedCount=0
@@ -48,6 +47,6 @@ useFull.extend([messageCount,botInitiatedCount])
 
 # PUSHING LOGIC
 gc = gspread.service_account(filename='../secret-key.json')
-sh = gc.open_by_key('1M00XFS9THpS21bR0TStf6M2rzmnq23CnpXYU69xlW8I')
+sh = gc.open_by_key('1uO7meUfKpn-qUYpOVhwofc1jW24Gmv0iNrkqw5OxgLk')
 worksheet = sh.get_worksheet(1)
 worksheet.append_row(useFull)

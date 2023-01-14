@@ -62,14 +62,12 @@ rowData[9]=messageList[0].get('date')
 rowData.append(personCount)
 rowData.insert(0,yesterday.strftime("%x"))
 
-print(len(messageList))
-
 # PUSHING to JSON
 # with open('telegramMaster.json', "w") as file:
 #     json.dump(rowData, file)
 
 # PUSHING to SHEET
 gc = gspread.service_account(filename='../secret-key.json')
-sh = gc.open_by_key('1M00XFS9THpS21bR0TStf6M2rzmnq23CnpXYU69xlW8I')
+sh = gc.open_by_key('1uO7meUfKpn-qUYpOVhwofc1jW24Gmv0iNrkqw5OxgLk')
 worksheet = sh.get_worksheet(4)
 worksheet.append_row(rowData)
