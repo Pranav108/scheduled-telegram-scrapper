@@ -1,4 +1,5 @@
 import sys
+sys.path.append('..')
 import config
 from pyrogram import Client
 import datetime
@@ -47,6 +48,6 @@ useFull.extend([messageCount,botInitiatedCount])
 
 # PUSHING LOGIC
 gc = gspread.service_account(filename='../secret-key.json')
-sh = gc.open_by_key('1uO7meUfKpn-qUYpOVhwofc1jW24Gmv0iNrkqw5OxgLk')
+sh = gc.open_by_key('1M00XFS9THpS21bR0TStf6M2rzmnq23CnpXYU69xlW8I')
 worksheet = sh.get_worksheet(1)
 worksheet.append_row(useFull)

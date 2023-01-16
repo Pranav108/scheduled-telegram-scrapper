@@ -68,6 +68,6 @@ rowData.insert(0,yesterday.strftime("%x"))
 
 # PUSHING to SHEET
 gc = gspread.service_account(filename='../secret-key.json')
-sh = gc.open_by_key('1uO7meUfKpn-qUYpOVhwofc1jW24Gmv0iNrkqw5OxgLk')
+sh = gc.open_by_key('1M00XFS9THpS21bR0TStf6M2rzmnq23CnpXYU69xlW8I')
 worksheet = sh.get_worksheet(4)
 worksheet.append_row(rowData)

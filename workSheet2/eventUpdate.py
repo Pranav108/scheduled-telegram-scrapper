@@ -99,7 +99,10 @@ with open('userMaster.json', "w") as file:
 
 # PUSHING to SHEET
 result=makeList(userMap)
+result.insert(0,['User_ID','FirstName+LastName','User_Name','Date of Joining',	'Date of Leaving','	Last Seen',	'Last Activity'])
 gc = gspread.service_account(filename='../secret-key.json')
-sh = gc.open_by_key('1uO7meUfKpn-qUYpOVhwofc1jW24Gmv0iNrkqw5OxgLk')
+sh = gc.open_by_key('1M00XFS9THpS21bR0TStf6M2rzmnq23CnpXYU69xlW8I')
 worksheet = sh.get_worksheet(2)
+worksheet.clear()
 worksheet.append_rows(result)
+worksheet.format('A1:G1', {'textFormat': {'bold': True}})
