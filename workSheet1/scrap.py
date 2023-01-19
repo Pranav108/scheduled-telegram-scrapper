@@ -46,6 +46,10 @@ for i in range(24):
 useFull.insert(0,yesterday.strftime("%x"))
 useFull.extend([messageCount,botInitiatedCount])
 
+# PUSHING to JSON
+# with open('messageList.json', "w") as file:
+#     json.dump(messageList, file,indent=4)
+
 # PUSHING LOGIC
 gc = gspread.service_account(filename='../secret-key.json')
 sh = gc.open_by_key('1M00XFS9THpS21bR0TStf6M2rzmnq23CnpXYU69xlW8I')

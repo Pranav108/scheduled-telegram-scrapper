@@ -23,4 +23,5 @@ schedule.every().day.at("04:10").do(user_Master)
 schedule.every().day.at("04:20").do(user_Data)
 schedule.every().day.at("04:30").do(telegram_Master)
 schedule.run_all()
+
 schedule.run_all(delay_seconds=600)

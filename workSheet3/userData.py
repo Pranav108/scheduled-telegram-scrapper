@@ -47,6 +47,7 @@ async def findWod():
             result = re.search('- (.*):', messageTxt)
             if result:
                 wordOfTheDay=result.group(1).casefold()
+            print(wordOfTheDay)
 
 async def main():
     async with app:
@@ -73,7 +74,8 @@ async def main():
                         for el in message['entities']:
                             if  el["type"] == "MessageEntityType.TEXT_MENTION" and 'user' in el:
                                 mentionedId = el['user'].get('id')
-                                userMap[mentionedId][5]=userMap[mentionedId][5]+1
+                                if mentionedId in userMap:
+                                    userMap[mentionedId][5]=userMap[mentionedId][5]+1
                     if 'Not enough players.' in message['text'] or 'There are now 2 players.' in message['text'] :
                         useFullMessage.append(message)
 
@@ -90,7 +92,8 @@ async def main():
                 #     write logic to find if user userd wordOfTheDay
                 
                 # MessageCount
-                userMap[user_id][2]=userMap[user_id][2]+1
+                if user_id in userMap:
+                    userMap[user_id][2]=userMap[user_id][2]+1
                 if wordOfTheDay != 'NO_WORD_YET':
                     targetMessage=''
                     if 'caption' in message:

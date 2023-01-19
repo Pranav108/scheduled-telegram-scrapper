@@ -1663,14 +1663,6 @@
         "LAST_MONTH",
         "2022-12-20"
     ],
-    "1708268145": [
-        "Padmini N",
-        "NOT_AVL",
-        "2022-12-20",
-        "NILL_FOR_NOW",
-        "RECENTLY",
-        "2022-12-20"
-    ],
     "5571038329": [
         "Amulya Ammu ",
         "NOT_AVL",
@@ -1958,14 +1950,6 @@
         "NILL_FOR_NOW",
         "TODAY",
         "2022-12-15"
-    ],
-    "1479169413": [
-        "Deepthi P.C",
-        "Deepudeepu123456789",
-        "2022-12-15",
-        "NILL_FOR_NOW",
-        "TODAY",
-        "NO_MESSAGE"
     ],
     "5644586945": [
         "Take ",
@@ -2319,14 +2303,6 @@
         "NOT_AVILABLE",
         "NO_MESSAGE"
     ],
-    "5740692258": [
-        "OMKARA .",
-        "NOT_AVL",
-        "2023-01-12",
-        "NILL_FOR_NOW",
-        "RECENTLY",
-        "2023-01-12"
-    ],
     "628273248": [
         "Guru Gowda",
         "NOT_AVL",
@@ -2358,5 +2334,37 @@
         "NILL_FOR_NOW",
         "TODAY",
         "2023-01-15"
+    ],
+    "1479169413": [
+        "Deepthi P.C",
+        "Deepudeepu123456789",
+        "2022-12-15",
+        "2023-01-16",
+        "TODAY",
+        "NO_ACTIVITY"
+    ],
+    "5740692258": [
+        "OMKARA .",
+        "NOT_AVL",
+        "2023-01-12",
+        "2023-01-17",
+        "RECENTLY",
+        "2023-01-17"
+    ],
+    "1708268145": [
+        "Padmini N",
+        "NOT_AVL",
+        "2022-12-20",
+        "2023-01-18",
+        "RECENTLY",
+        "2022-12-20"
+    ],
+    "1702991357": [
+        "NS LOVER",
+        "NOT_AVL",
+        "2023-01-18",
+        "NILL_FOR_NOW",
+        "TODAY",
+        "2023-01-18"
     ]
 }
