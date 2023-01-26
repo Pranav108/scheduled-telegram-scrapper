@@ -11,18 +11,17 @@ app = Client(
     api_hash = config.API_HASH,
 )
 TARGET='jobcoach_kannada'
-todayDate = datetime.date.today()
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 memberList=[]
 messageList=[]
 userSet=set()
-personCount=WCBinitatedCount=0
+personCount=WCBinitatedCount=JWB_initiatedCount=0
 rowData=[0,0,0,0,'MSG',0,0,'MSG',0,0,'NIL']
 async def main():
     async with app:
         async for member in app.get_chat_members(TARGET):
             member=json.loads(str(member))
-            global personCount,WCBinitatedCount
+            global personCount,WCBinitatedCount,JWB_initiatedCount
             if 'status' in member['user']:
                 personCount=personCount+1
                 status=member['user'].get('status').split('.')[1]
@@ -46,6 +45,8 @@ async def main():
             if('text' in message):
                 if(('from_user' in message) and message['from_user'].get('username')=="on9wordchainbot" and ('Turn order:' in message['text'])):
                    WCBinitatedCount=WCBinitatedCount+1
+                if(('from_user' in message) and message['from_user'].get('username')=="jumble_word_bot" and ('Here is the first word' in message['text'])):
+                    JWB_initiatedCount=JWB_initiatedCount+1   
                 if 'from_user' in message :
                     userSet.add(message['from_user'].get('id'))
                 elif 'sender_chat' in message:
@@ -57,6 +58,7 @@ app.run(main())
 rowData[4]=len(userSet)
 rowData[5]=len(messageList)
 rowData[6]=WCBinitatedCount
+rowData[7]=JWB_initiatedCount
 rowData[8]=messageList[len(messageList)-1].get('date')
 rowData[9]=messageList[0].get('date')
 rowData.append(personCount)

@@ -319,14 +319,6 @@
         "TODAY",
         "2023-01-07"
     ],
-    "5522578137": [
-        "Govind Rajaput",
-        "NOT_AVL",
-        "2022-12-15",
-        "NILL_FOR_NOW",
-        "TODAY",
-        "2023-01-07"
-    ],
     "5184078084": [
         "Ramyajeswin Gowda",
         "NOT_AVL",
@@ -791,14 +783,6 @@
         "LONG_AGO",
         "NO_MESSAGE"
     ],
-    "1559540932": [
-        "Maitra Mikali",
-        "NOT_AVL",
-        "2022-12-26",
-        "NILL_FOR_NOW",
-        "RECENTLY",
-        "2022-12-26"
-    ],
     "1065923903": [
         "Vishal Adin",
         "NOT_AVL",
@@ -843,14 +827,6 @@
         "Raghavendra Addakula",
         "NOT_AVL",
         "2022-12-25",
-        "NILL_FOR_NOW",
-        "OFFLINE",
-        "2022-12-25"
-    ],
-    "5490655845": [
-        "Nalima Z",
-        "NOT_AVL",
-        "2022-12-03",
         "NILL_FOR_NOW",
         "OFFLINE",
         "2022-12-25"
@@ -1199,14 +1175,6 @@
         "LAST_WEEK",
         "2022-12-21"
     ],
-    "791661819": [
-        "Navya Nagesh",
-        "NOT_AVL",
-        "2022-12-20",
-        "NILL_FOR_NOW",
-        "RECENTLY",
-        "2022-12-20"
-    ],
     "629508617": [
         "Sanjay M G ",
         "NOT_AVL",
@@ -1445,14 +1413,6 @@
         "2022-12-20",
         "NILL_FOR_NOW",
         "LAST_MONTH",
-        "2022-12-20"
-    ],
-    "5212788028": [
-        "Rakshitha S S",
-        "NOT_AVL",
-        "2022-12-20",
-        "NILL_FOR_NOW",
-        "TODAY",
         "2022-12-20"
     ],
     "712009795": [
@@ -2366,5 +2326,109 @@
         "NILL_FOR_NOW",
         "TODAY",
         "2023-01-18"
+    ],
+    "5800302527": [
+        "Shilpa N S Shilpa N S",
+        "NOT_AVL",
+        "2023-01-19",
+        "NILL_FOR_NOW",
+        "TODAY",
+        "2023-01-19"
+    ],
+    "736506186": [
+        "Tanu Tripathi",
+        "NOT_AVL",
+        "2023-01-19",
+        "NILL_FOR_NOW",
+        "RECENTLY",
+        "2023-01-19"
+    ],
+    "1297812290": [
+        "Pooja Acharya",
+        "Pooja_acharya",
+        "2023-01-20",
+        "NILL_FOR_NOW",
+        "RECENTLY",
+        "2023-01-20"
+    ],
+    "5935997229": [
+        "Chirutha Nagesh",
+        "NOT_AVL",
+        "2023-01-20",
+        "2023-01-20",
+        "TODAY",
+        "2023-01-20"
+    ],
+    "791661819": [
+        "Navya Nagesh",
+        "NOT_AVL",
+        "2022-12-20",
+        "2023-01-20",
+        "RECENTLY",
+        "2022-12-20"
+    ],
+    "5212788028": [
+        "Rakshitha S S",
+        "NOT_AVL",
+        "2022-12-20",
+        "2023-01-21",
+        "TODAY",
+        "2023-01-21"
+    ],
+    "5709123075": [
+        "Bhargavi BS Bhargavi",
+        "NOT_AVL",
+        "2023-01-21",
+        "NILL_FOR_NOW",
+        "TODAY",
+        "2023-01-21"
+    ],
+    "5522578137": [
+        "Govind Rajaput",
+        "NOT_AVL",
+        "2022-12-15",
+        "2023-01-21",
+        "TODAY",
+        "2023-01-07"
+    ],
+    "5490655845": [
+        "Nalima Z",
+        "NOT_AVL",
+        "2022-12-03",
+        "2023-01-22",
+        "TODAY",
+        "2022-12-25"
+    ],
+    "649711751": [
+        "Hari ...",
+        "NOT_AVL",
+        "2023-01-23",
+        "NILL_FOR_NOW",
+        "RECENTLY",
+        "2023-01-23"
+    ],
+    "1822763503": [
+        "GURU KIRANA ",
+        "NOT_AVL",
+        "2023-01-24",
+        "NILL_FOR_NOW",
+        "TODAY",
+        "2023-01-24"
+    ],
+    "1559540932": [
+        "Maitra Mikali",
+        "NOT_AVL",
+        "2022-12-26",
+        "2023-01-25",
+        "RECENTLY",
+        "2022-12-26"
+    ],
+    "5957011614": [
+        "Manju Kabaddi Manju Kabaddi",
+        "NOT_AVL",
+        "2023-01-25",
+        "NILL_FOR_NOW",
+        "TODAY",
+        "2023-01-25"
     ]
 }

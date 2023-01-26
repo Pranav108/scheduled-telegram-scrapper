@@ -13,7 +13,6 @@ app = Client(
     api_hash = config.API_HASH,
 )
 TARGET='jobcoach_kannada'
-todayDate = datetime.date.today()
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 userList=[]
 messageList=[]
