@@ -6,4 +6,4 @@ config.py
 secret-key.json
 
 # file to store user-authentication details
-*.session
+# *.session
