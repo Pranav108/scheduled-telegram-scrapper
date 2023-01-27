@@ -1,2 +1,4 @@
 gspread==5.7.2
 Pyrogram==2.0.93
+schedule==1.1.0
+

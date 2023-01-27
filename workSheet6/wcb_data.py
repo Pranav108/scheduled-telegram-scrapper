@@ -11,11 +11,11 @@ app = Client(
     api_hash = config.API_HASH,
 )
 TARGET='jobcoach_kannada'
-async def main(dateCouter):
+yesterday = datetime.date.today() - datetime.timedelta(days=1)
+messageList=[]
+sheetData=[]
+async def main():
     async with app:
-        yesterday = datetime.date.today() - datetime.timedelta(days=26-dateCouter)
-        messageList=[]
-        sheetData=[]
         async for message in app.get_chat_history(TARGET): 
             if(message.date.date()>yesterday):
                 continue
@@ -65,17 +65,14 @@ async def main(dateCouter):
             else:
                 i=i+1
                             
-# Column for OFFLINE and ONLINE can also be add
+app.run(main())
 
 # PUSHING to JSON
 # with open('messageList.json', "w") as file:
 #     json.dump(messageList, file)
 
 # PUSHING to SHEET
-        gc = gspread.service_account(filename='../secret-key.json')
-        sh = gc.open_by_key('1M00XFS9THpS21bR0TStf6M2rzmnq23CnpXYU69xlW8I')
-        worksheet = sh.get_worksheet(6)
-        worksheet.append_rows(sheetData)
-        
-for i in range(26):
-    app.run(main(i))
+gc = gspread.service_account(filename='../secret-key.json')
+sh = gc.open_by_key('1M00XFS9THpS21bR0TStf6M2rzmnq23CnpXYU69xlW8I')
+worksheet = sh.get_worksheet(6)
+worksheet.append_rows(sheetData)

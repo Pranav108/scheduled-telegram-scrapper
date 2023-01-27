@@ -115,8 +115,8 @@ app.run(main())
 userList=list(userMap.values())
 
 # PUSHING to JSON
-with open('userData.json', "w") as file:
-    json.dump(userList, file)
+# with open('userData.json', "w") as file:
+#     json.dump(userList, file)
 
 # PUSHING to SHEET
 gc = gspread.service_account(filename='../secret-key.json')
