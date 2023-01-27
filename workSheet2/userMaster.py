@@ -1,14 +1,16 @@
-import sys
-sys.path.append('..')
+import sys,os
+from dotenv import load_dotenv
+load_dotenv()
 from pyrogram import Client
-import config
 import datetime
 import gspread
 import json
+
+cur_path = os.path.dirname(__file__)
 app = Client(
     "YOUR_BOT",
-    api_id = config.API_ID,
-    api_hash = config.API_HASH,
+    api_id = os.getenv('API_ID'),
+    api_hash = os.getenv('API_HASH')
 )
 TARGET='jobcoach_kannada'
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
@@ -63,14 +65,14 @@ app.run(main())
 # print(len(messageList))
 # PUSHING to JSON
 print(len(userMap))
-with open('userMaster.json', "w") as file:
-    json.dump(userMap, file)
+# with open(os.path.join(cur_path, 'userMaster.json'), "w") as file:
+#     json.dump(userMap, file)
 
-result=makeList(userMap)
+# result=makeList(userMap)
 # PUSHING to SHEET
 # Run this to ONLY to clear the left members data
-# gc = gspread.service_account(filename='../secret-key.json')
-# sh = gc.open_by_key('1M00XFS9THpS21bR0TStf6M2rzmnq23CnpXYU69xlW8I')
+# gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
+# sh = gc.open_by_key(os.getenv('SHEET_ID'))
 # worksheet = sh.get_worksheet(2)
 # worksheet.append_rows(result)
 

@@ -1,14 +1,16 @@
-import sys
-sys.path.append('..')
+import sys,os
+from dotenv import load_dotenv
+load_dotenv()
 from pyrogram import Client
-import config
 import datetime
 import json
 import gspread
+
+cur_path = os.path.dirname(__file__)
 app = Client(
     "YOUR_BOT",
-    api_id = config.API_ID,
-    api_hash = config.API_HASH,
+    api_id = os.getenv('API_ID'),
+    api_hash = os.getenv('API_HASH')
 )
 TARGET='jobcoach_kannada'
 todayDate = datetime.date.today()
@@ -17,7 +19,7 @@ tempUserMap={}
 userMap={}
 userMap2={}
 activityList=[]
-with open('userMaster.json') as f:
+with open(os.path.join(cur_path, 'userMaster.json')) as f:
    userMap = json.load(f)
    
 def getLastSeen(user):
@@ -93,15 +95,16 @@ async def makeActivityList():
 app.run(makeActivityList())
 
 # PUSHING to JSON
-with open('userMaster.json', "w") as file:
+with open(os.path.join(cur_path, 'userMaster.json'), "w") as file:
     json.dump(userMap, file,indent=4)
 
 
 # PUSHING to SHEET
 result=makeList(userMap)
 result.insert(0,['User_ID','FirstName+LastName','User_Name','Date of Joining',	'Date of Leaving','	Last Seen',	'Last Activity'])
-gc = gspread.service_account(filename='../secret-key.json')
-sh = gc.open_by_key('1M00XFS9THpS21bR0TStf6M2rzmnq23CnpXYU69xlW8I')
+gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
+sh = gc.open_by_key(os.getenv('SHEET_ID'))
 worksheet = sh.get_worksheet(2)
 worksheet.clear()
 worksheet.append_rows(result)
+print('scrapping in wordsheet2 done, successfully')

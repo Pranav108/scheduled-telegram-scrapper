@@ -1,6 +1,6 @@
-import sys
-sys.path.append('..')
-import config
+import sys,os
+from dotenv import load_dotenv
+load_dotenv()
 from pyrogram import Client
 import datetime
 import gspread
@@ -8,8 +8,8 @@ import json
 
 app = Client(
     "YOUR_BOT",
-    api_id = config.API_ID,
-    api_hash = config.API_HASH,
+    api_id = os.getenv('API_ID'),
+    api_hash = os.getenv('API_HASH')
 )
 todayDate = datetime.date.today()
 yesterday = todayDate - datetime.timedelta(days=1)
@@ -45,13 +45,13 @@ for i in range(24):
         messageSum=0
 useFull.insert(0,yesterday.strftime("%x"))
 useFull.extend([messageCount,botInitiatedCount])
-
+print('scrappinmg in wordsheet1 done, successfully')
 # PUSHING to JSON
 # with open('messageList.json', "w") as file:
 #     json.dump(messageList, file,indent=4)
 
 # PUSHING LOGIC
-gc = gspread.service_account(filename='../secret-key.json')
-sh = gc.open_by_key('1M00XFS9THpS21bR0TStf6M2rzmnq23CnpXYU69xlW8I')
+gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
+sh = gc.open_by_key(os.getenv('SHEET_ID'))
 worksheet = sh.get_worksheet(1)
 worksheet.append_row(useFull)

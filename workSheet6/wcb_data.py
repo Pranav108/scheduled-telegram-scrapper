@@ -1,14 +1,16 @@
-import sys
-sys.path.append('..')
+import sys,os
+from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
 from pyrogram import Client
-import config
 import datetime
 import gspread
 import json
+
 app = Client(
     "YOUR_BOT",
-    api_id = config.API_ID,
-    api_hash = config.API_HASH,
+    api_id = os.getenv('API_ID'),
+    api_hash = os.getenv('API_HASH')
 )
 TARGET='jobcoach_kannada'
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
@@ -72,7 +74,8 @@ app.run(main())
 #     json.dump(messageList, file)
 
 # PUSHING to SHEET
-gc = gspread.service_account(filename='../secret-key.json')
-sh = gc.open_by_key('1M00XFS9THpS21bR0TStf6M2rzmnq23CnpXYU69xlW8I')
+gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
+sh = gc.open_by_key(os.getenv('SHEET_ID'))
 worksheet = sh.get_worksheet(6)
 worksheet.append_rows(sheetData)
+print('scrapping in wordsheet6 done, successfully')
