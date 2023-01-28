@@ -45,7 +45,6 @@ for i in range(24):
         messageSum=0
 useFull.insert(0,yesterday.strftime("%x"))
 useFull.extend([messageCount,botInitiatedCount])
-print('scrappinmg in wordsheet1 done, successfully')
 # PUSHING to JSON
 # with open('messageList.json', "w") as file:
 #     json.dump(messageList, file,indent=4)
@@ -55,3 +54,4 @@ gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.jso
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
 worksheet = sh.get_worksheet(1)
 worksheet.append_row(useFull)
+print('scrappinmg in wordsheet1 done, successfully')

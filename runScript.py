@@ -1,6 +1,7 @@
 import schedule
 import os
 import time
+import push_db
 from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
@@ -27,12 +28,24 @@ def WCB_Data():
     workSheet4 = os.path.join(root_cur_path, 'workSheet6/wcb_data.py')
     os.system('python ' + workSheet4)
 
-schedule.every().day.at(os.getenv('worksheet1_time')).do(contentAnalysis)
-schedule.every().day.at(os.getenv('worksheet2_time')).do(user_Master)
-schedule.every().day.at(os.getenv('worksheet3_time')).do(user_Data)
-schedule.every().day.at(os.getenv('worksheet4_time')).do(telegram_Master)
-schedule.every().day.at(os.getenv('worksheet6_time')).do(WCB_Data)
-
-while True:
-    schedule.run_pending()
+def parentCaller():
+    contentAnalysis()
     time.sleep(10)
+    user_Master()
+    time.sleep(10)
+    user_Data()
+    time.sleep(10)
+    telegram_Master()
+    time.sleep(10)
+    WCB_Data()
+    print('all sheet updated')
+    
+schedule.every().day.at(os.getenv('running_time')).do(parentCaller)
+
+# schedule.every().day.at(os.getenv('worksheet1_time')).do(contentAnalysis)
+# schedule.every().day.at(os.getenv('worksheet2_time')).do(user_Master)
+# schedule.every().day.at(os.getenv('worksheet3_time')).do(user_Data)
+# schedule.every().day.at(os.getenv('worksheet4_time')).do(telegram_Master)
+# schedule.every().day.at(os.getenv('worksheet6_time')).do(WCB_Data)
+
+schedule.run_all(delay_seconds=10)

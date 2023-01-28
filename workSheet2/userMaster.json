@@ -1975,14 +1975,6 @@
         "RECENTLY",
         "2022-12-15"
     ],
-    "2065968508": [
-        "Chandu Renu",
-        "ChandiniAgowda",
-        "2022-12-15",
-        "NILL_FOR_NOW",
-        "TODAY",
-        "NO_MESSAGE"
-    ],
     "5639985057": [
         "Anusuya Anu",
         "NOT_AVL",
@@ -2430,5 +2422,13 @@
         "NILL_FOR_NOW",
         "TODAY",
         "2023-01-25"
+    ],
+    "2065968508": [
+        "Chandu Renu",
+        "ChandiniAgowda",
+        "2022-12-15",
+        "2023-01-27",
+        "TODAY",
+        "NO_ACTIVITY"
     ]
 }
