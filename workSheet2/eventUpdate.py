@@ -4,6 +4,9 @@ load_dotenv()
 from pyrogram import Client
 import datetime
 import json
+sys.path.append(os.getcwd())
+from db.db_model import DynamoDB_con
+DB = DynamoDB_con()
 import gspread
 
 cur_path = os.path.dirname(__file__)
@@ -98,13 +101,30 @@ app.run(makeActivityList())
 with open(os.path.join(cur_path, 'userMaster.json'), "w") as file:
     json.dump(userMap, file,indent=4)
 
-
-# PUSHING to SHEET
 result=makeList(userMap)
+
+# PUSHING to DynamoDB
+DB.deleteTotalData('ST_User_Master')
+for el in result:
+    print(el)
+    dataFormat={
+        'User_ID':el[0],
+        'FirstName_LastName':el[1],
+        'User_Name':el[2],
+        'Date_of_Joining':el[3],
+        'No.Date of Leaving':el[4],
+        'Last_Seen':el[5],
+        'Last Activity':el[6],
+    }
+    DB.send_data(dataFormat,'ST_User_Master')
+print('Data from User_Master_DB')
+# print(DB.read_read('ST_User_Master'))
+# PUSHING to SHEET
+
 result.insert(0,['User_ID','FirstName+LastName','User_Name','Date of Joining',	'Date of Leaving','	Last Seen',	'Last Activity'])
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
 worksheet = sh.get_worksheet(2)
 worksheet.clear()
 worksheet.append_rows(result)
-print('scrapping in wordsheet2 done, successfully')
+print('scrapping in workSheet2 done, successfully')

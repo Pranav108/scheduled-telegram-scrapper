@@ -5,6 +5,9 @@ from pyrogram import Client
 import datetime
 import gspread
 import json
+sys.path.append(os.getcwd())
+from db.db_model import DynamoDB_con
+DB = DynamoDB_con()
 
 app = Client(
     "YOUR_BOT",
@@ -49,9 +52,47 @@ useFull.extend([messageCount,botInitiatedCount])
 # with open('messageList.json', "w") as file:
 #     json.dump(messageList, file,indent=4)
 
+dataFormat={
+    'Timing':useFull[0],
+    '07:00 - 07:59':useFull[1],
+    '08:00 - 08:59':useFull[2],
+    '09:00 - 09:59':useFull[3],
+    '10:00 - 10:59':useFull[4],
+    'Total_Message':useFull[5],
+    '11:00 - 11:59':useFull[6],
+    '12:00 - 12:59':useFull[7],
+    '13:00 - 13:59':useFull[8],
+    '14:00 - 14:59':useFull[9],
+    'Total_Message':useFull[10],
+    '15:00 - 15:59':useFull[11],
+    '16:00 - 16:59':useFull[12],
+    '17:00 - 17:59':useFull[13],
+    '18:00 - 18:59':useFull[14],
+    'Total_Message':useFull[15],
+    '19:00 - 19:59':useFull[16],
+    '20:00 - 20:59':useFull[17],
+    '21:00 - 21:59':useFull[18],
+    '22:00 - 22:59':useFull[19],
+    'Total_Message':useFull[20],
+    '23:00 - 23:59':useFull[21],
+    '00:00 - 00:59':useFull[22],
+    '01:00 - 01:59':useFull[23],
+    '02:00 - 02:59':useFull[24],
+    'Total_Message':useFull[25],
+    '03:00 - 03:59':useFull[26],
+    '04:00 - 04:59':useFull[27],
+    '05:00 - 05:59':useFull[28],
+    '06:00 - 06:59':useFull[29],
+    'Total_Message':useFull[30],
+    'Total_Message_In_Day':useFull[31],
+}
+DB.send_data(dataFormat,'ST_Content_Analysis')
+print('Data from Content_Analysis_DB')
+# print(DB.read_read('ST_Content_Analysis'))
+
 # PUSHING LOGIC
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
 worksheet = sh.get_worksheet(1)
 worksheet.append_row(useFull)
-print('scrappinmg in wordsheet1 done, successfully')
+print('scrappinmg in workSheet1 done, successfully')

@@ -5,6 +5,9 @@ from pyrogram import Client
 import datetime
 import gspread
 import json
+sys.path.append(os.getcwd())
+from db.db_model import DynamoDB_con
+DB = DynamoDB_con()
 
 cur_path = os.path.dirname(__file__)
 app = Client(

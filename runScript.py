@@ -1,7 +1,7 @@
 import schedule
 import os
 import time
-# import push_db
+import db.create_db
 from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
@@ -30,15 +30,15 @@ def WCB_Data():
 
 def parentCaller():
     contentAnalysis()
-    time.sleep(10)
+    time.sleep(20)
     user_Master()
-    time.sleep(10)
+    time.sleep(20)
     user_Data()
-    time.sleep(10)
+    time.sleep(20)
     telegram_Master()
-    time.sleep(10)
+    time.sleep(20)
     WCB_Data()
-    print('all sheet updated')
+    print('All sheet updated')
     
 schedule.every().day.at(os.getenv('running_time')).do(parentCaller)
 

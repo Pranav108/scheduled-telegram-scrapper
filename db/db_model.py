@@ -19,18 +19,17 @@ class DynamoDB_con():
             response = table.scan(
                 ExclusiveStartKey=response['LastEvaluatedKey'])
             data.extend(response['Items'])
-        # print('total out put data: ',data)
         return data, len(data)
-    # def deleteTotalData(self,table_name='TB_Temp_JumbledWord_Session'):
-    #     flag = False
-    #     table = self.dynamo_client.Table(table_name)
-    #     scan = table.scan()
-    #     while not flag:
-    #         with table.batch_writer() as batch:
-    #             for each in scan['Items']:
-    #                 batch.delete_item(
-    #                             Key={
-    #                             'Id': each['Id']
-    #                             }
-    #                         )
-    #             flag = True
+    def deleteTotalData(self,table_name='TB_Temp_JumbledWord_Session'):
+        flag = False
+        table = self.dynamo_client.Table(table_name)
+        scan = table.scan()
+        while not flag:
+            with table.batch_writer() as batch:
+                for each in scan['Items']:
+                    batch.delete_item(
+                                Key={
+                                'Id': each['Id']
+                                }
+                            )
+                flag = True
