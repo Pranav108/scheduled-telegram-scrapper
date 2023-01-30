@@ -1,7 +1,6 @@
 import schedule
 import os
 import time
-# import push_db
 from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()

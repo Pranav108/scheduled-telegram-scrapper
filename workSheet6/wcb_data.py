@@ -1,5 +1,4 @@
 import sys,os
-# sys.path.append(os.getcwd())
 from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
@@ -8,8 +7,6 @@ import datetime
 import gspread
 import json
 
-# from classDB import DynamoDB_con
-# DB = DynamoDB_con()
 
 app = Client(
     "YOUR_BOT",
@@ -77,17 +74,6 @@ app.run(main())
 # with open('messageList.json', "w") as file:
 #     json.dump(messageList, file)
 
-# print(sheetData)
-# for el in sheetData:
-#     print(el)
-#     dataFormat={
-#         'Datetime':el[0],
-#         'WordChainBot_InitiatedByUser_ID':el[1],
-#         'participantCount':el[2],
-#         'Success':None,
-#     }
-#     DB.send_data(dataFormat,'ST_WCB_Data')
-# WCB_Data = DB.read_read('ST_WCB_Data')
     
 # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
