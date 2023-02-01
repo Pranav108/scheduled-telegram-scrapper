@@ -126,7 +126,6 @@ userList=list(userMap.values())
 
 # PUSHING to DynamoDB
 for el in userList:
-    print(el)
     dataFormat={
         'ID':str(time.time()*1000),
         'Date':el[0],
@@ -142,11 +141,11 @@ for el in userList:
     }
     DB.send_data(dataFormat,'ST_User_Data')
 print('Data from User_Data_DB')
-# print(DB.read_read('ST_User_Data'))
+print(DB.read_data('ST_User_Data'))
 
 # PUSHING to SHEET
-gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
-sh = gc.open_by_key(os.getenv('SHEET_ID'))
-worksheet = sh.get_worksheet(3)
-worksheet.append_rows(userList)
-print('scrapping in workSheet3 done, successfully')
+# gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
+# sh = gc.open_by_key(os.getenv('SHEET_ID'))
+# worksheet = sh.get_worksheet(3)
+# worksheet.append_rows(userList)
+# print('scrapping in workSheet3 done, successfully')

@@ -39,7 +39,6 @@ async def main():
                     rowData[3]=rowData[3]+1
             memberList.append(member)
             
-            
         async for message in app.get_chat_history(TARGET): 
             if(message.date.date()>yesterday):
                 continue
@@ -90,11 +89,11 @@ dataFormat={
 }
 DB.send_data(dataFormat,'ST_Telegram_Master')
 print('Data from Telegram_Master_DB')
-# print(DB.read_read('ST_Telegram_Master'))
+# print(DB.read_data('ST_Telegram_Master'))
 
 # PUSHING to SHEET
-gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
-sh = gc.open_by_key(os.getenv('SHEET_ID'))
-worksheet = sh.get_worksheet(4)
-worksheet.append_row(rowData)
-print('scrapping in workSheet4 done, successfully')
+# gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
+# sh = gc.open_by_key(os.getenv('SHEET_ID'))
+# worksheet = sh.get_worksheet(4)
+# worksheet.append_row(rowData)
+# print('scrapping in workSheet4 done, successfully')
