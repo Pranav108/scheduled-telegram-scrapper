@@ -21,17 +21,23 @@ cur_path = os.path.dirname(__file__)
 TARGET='jobcoach_kannada'
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 userList=[]
+messageList_ID=[]
 messageList=[]
 wordOfTheDay='NO_WORD_YET'
 userMap={}
 useFullMessage=[]
+
+userMap[-1001636582068]=[yesterday.strftime("%x"),id,0,'N',0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
 
 def checkValid(i, arr):
     user_id=0
     while i < len(arr) :
         txt=arr[i]['text']
         if '/start' in txt and '@on9wordchainbot' in txt:
-            user_id=int(arr[i]['from_user'].get('id'))
+            if 'from_user' in arr[i]:
+                user_id=int(arr[i]['from_user'].get('id'))
+            else :
+                user_id=int(arr[i]['sender_chat'].get('id'))
             break
         i=i+1
     while i < len(arr) :
@@ -58,9 +64,9 @@ async def main():
     async with app:
         async for member in app.get_chat_members(TARGET):
             member=json.loads(str(member))
-            messageList.append(member['user'].get('id'))
-            for id in messageList:
-                userMap[id]=[yesterday.strftime("%x"),id,0,'N',0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
+            messageList_ID.append(member['user'].get('id'))
+        for id in messageList_ID:
+            userMap[id]=[yesterday.strftime("%x"),id,0,'N',0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
         
         async for message in app.get_chat_history(TARGET): 
             if(message.date.date()>yesterday):
@@ -68,9 +74,15 @@ async def main():
             if(message.date.date()<yesterday):
                 break
             message=json.loads(str(message))
-            if ('text' in message or 'caption' in message) and 'sender_chat' not in message:
-                user_id=message['from_user'].get('id')
-                user_name=message['from_user'].get('username')
+            messageList.append(message)
+            typeOfUser=''
+            if 'from_user' in message:
+                typeOfUser='from_user'
+            else:
+                typeOfUser='sender_chat'
+            if ('text' in message or 'caption' in message):
+                user_id=message[typeOfUser].get('id')
+                user_name=message[typeOfUser].get('username')
                 global wordOfTheDay
                 
                 # No._WCB_Participated
@@ -121,27 +133,31 @@ app.run(main())
 userList=list(userMap.values())
 
 # PUSHING to JSON
-# with open('userData.json', "w") as file:
-#     json.dump(userList, file)
+# with open(os.path.join(cur_path, 'userData.json'), "w") as file:
+#     json.dump(userList, file,indent=4)
+    
+with open(os.path.join(cur_path, 'messageList.json'), "w") as file:
+    json.dump(messageList, file,indent=4)
+    
 
 # PUSHING to DynamoDB
-for el in userList:
-    dataFormat={
-        'ID':str(time.time()*1000),
-        'Date':el[0],
-        'User_ID':el[1],
-        'No_of_message_sent':el[2],
-        'used_WOD':el[3],
-        'No._WCB_Initiated':el[4],
-        'No._WCB_Participated':el[5],
-        'No._JWB_Initiated':el[6],
-        'No._JWB_Participated':el[7],
-        'No._QuizQues_Attempted':el[8],
-        'No._QuizQues_Correct':el[9],
-    }
-    DB.send_data(dataFormat,'ST_User_Data')
-print('Data from User_Data_DB')
-print(DB.read_data('ST_User_Data'))
+# for el in userList:
+#     dataFormat={
+#         'ID':str(time.time()*1000),
+#         'Date':el[0],
+#         'User_ID':el[1],
+#         'No_of_message_sent':el[2],
+#         'used_WOD':el[3],
+#         'No._WCB_Initiated':el[4],
+#         'No._WCB_Participated':el[5],
+#         'No._JWB_Initiated':el[6],
+#         'No._JWB_Participated':el[7],
+#         'No._QuizQues_Attempted':el[8],
+#         'No._QuizQues_Correct':el[9],
+#     }
+#     DB.send_data(dataFormat,'ST_User_Data')
+# print('Data from User_Data_DB')
+# print(DB.read_data('ST_User_Data'))
 
 # PUSHING to SHEET
 # gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))

@@ -45,15 +45,17 @@ async def main():
             if(message.date.date()<yesterday):
                 break
             message=json.loads(str(message))
+            typeOfUser=''
+            if 'from_user' in message:
+                typeOfUser='from_user'
+            else:
+                typeOfUser='sender_chat'
             if('text' in message):
-                if(('from_user' in message) and message['from_user'].get('username')=="on9wordchainbot" and ('Turn order:' in message['text'])):
+                if(message[typeOfUser].get('username')=="on9wordchainbot" and ('Turn order:' in message['text'])):
                    WCBinitatedCount=WCBinitatedCount+1
-                if(('from_user' in message) and message['from_user'].get('username')=="jumble_word_bot" and ('Here is the first word' in message['text'])):
+                if(message[typeOfUser].get('username')=="jumble_word_bot" and ('Here is the first word' in message['text'])):
                     JWB_initiatedCount=JWB_initiatedCount+1   
-                if 'from_user' in message :
-                    userSet.add(message['from_user'].get('id'))
-                elif 'sender_chat' in message:
-                    userSet.add(message['sender_chat'].get('id'))
+                userSet.add(message[typeOfUser].get('id'))
                 messageList.append(message)
 
 # Column for OFFLINE and ONLINE can also be add
