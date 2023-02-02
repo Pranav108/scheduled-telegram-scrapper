@@ -22,12 +22,11 @@ TARGET='jobcoach_kannada'
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 userList=[]
 messageList_ID=[]
-messageList=[]
 wordOfTheDay='NO_WORD_YET'
-userMap={}
+userMap={
+    -1001636582068:[yesterday.strftime("%x"),-1001636582068,0,'N',0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
+    }
 useFullMessage=[]
-
-userMap[-1001636582068]=[yesterday.strftime("%x"),id,0,'N',0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
 
 def checkValid(i, arr):
     user_id=0
@@ -74,7 +73,6 @@ async def main():
             if(message.date.date()<yesterday):
                 break
             message=json.loads(str(message))
-            messageList.append(message)
             typeOfUser=''
             if 'from_user' in message:
                 typeOfUser='from_user'
@@ -131,37 +129,31 @@ app.run(findWod())
 app.run(main())
 
 userList=list(userMap.values())
-
 # PUSHING to JSON
 # with open(os.path.join(cur_path, 'userData.json'), "w") as file:
 #     json.dump(userList, file,indent=4)
     
-with open(os.path.join(cur_path, 'messageList.json'), "w") as file:
-    json.dump(messageList, file,indent=4)
-    
-
 # PUSHING to DynamoDB
-# for el in userList:
-#     dataFormat={
-#         'ID':str(time.time()*1000),
-#         'Date':el[0],
-#         'User_ID':el[1],
-#         'No_of_message_sent':el[2],
-#         'used_WOD':el[3],
-#         'No._WCB_Initiated':el[4],
-#         'No._WCB_Participated':el[5],
-#         'No._JWB_Initiated':el[6],
-#         'No._JWB_Participated':el[7],
-#         'No._QuizQues_Attempted':el[8],
-#         'No._QuizQues_Correct':el[9],
-#     }
-#     DB.send_data(dataFormat,'ST_User_Data')
-# print('Data from User_Data_DB')
-# print(DB.read_data('ST_User_Data'))
+for el in userList:
+    dataFormat={
+        'ID':str(time.time()*1000),
+        'Date':el[0],
+        'User_ID':el[1],
+        'No_of_message_sent':el[2],
+        'used_WOD':el[3],
+        'No._WCB_Initiated':el[4],
+        'No._WCB_Participated':el[5],
+        'No._JWB_Initiated':el[6],
+        'No._JWB_Participated':el[7],
+        'No._QuizQues_Attempted':el[8],
+        'No._QuizQues_Correct':el[9],
+    }
+    DB.send_data(dataFormat,'ST_User_Data')
+print('Data from User_Data_DB')
 
 # PUSHING to SHEET
-# gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
-# sh = gc.open_by_key(os.getenv('SHEET_ID'))
-# worksheet = sh.get_worksheet(3)
-# worksheet.append_rows(userList)
-# print('scrapping in workSheet3 done, successfully')
+gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
+sh = gc.open_by_key(os.getenv('SHEET_ID'))
+worksheet = sh.get_worksheet(3)
+worksheet.append_rows(userList)
+print('scrapping in workSheet3 done, successfully')

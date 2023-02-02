@@ -88,11 +88,10 @@ for el in sheetData:
     }
     DB.send_data(dataFormat,'ST_WCB_Data')
 print('Data from WCB_Data_DB')
-# print(DB.read_data('ST_WCB_Data'))
     
 # PUSHING to SHEET
-# gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
-# sh = gc.open_by_key(os.getenv('SHEET_ID'))
-# worksheet = sh.get_worksheet(6)
-# worksheet.append_rows(sheetData)
-# print('scrapping in workSheet6 done, successfully')
+gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
+sh = gc.open_by_key(os.getenv('SHEET_ID'))
+worksheet = sh.get_worksheet(6)
+worksheet.append_rows(sheetData)
+print('scrapping in workSheet6 done, successfully')

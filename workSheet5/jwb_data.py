@@ -21,6 +21,7 @@ def refactor(obj):
 yesterday=yesterday.strftime('%Y-%m-%d')
 sheetData=DB.read_data('ST_JWB_Data',yesterday)
 sheetData=list(map(refactor,sheetData))
+print(sheetData)
 
 # with open('workSheet5/messageList.json') as f:
 #    sheetData = json.load(f)

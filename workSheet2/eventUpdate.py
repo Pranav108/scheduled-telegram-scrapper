@@ -70,7 +70,6 @@ async def scrap(activityList):
             updateUser=await getUserInfo(user=event.get('user'),Date_of_Joining=Date_of_Joining,Date_of_Leaving=Date_of_Leaving)             
             userMap[id]=updateUser
             
-                
 async def makeActivityList():
     async with app:
         async for event in app.get_chat_event_log(TARGET):
@@ -111,19 +110,19 @@ with open(os.path.join(cur_path, 'userMaster.json'), "w") as file:
 result=makeList(userMap)
 
 # PUSHING to DynamoDB
-# DB.deleteTotalData('ST_User_Master')
-# for el in result:
-#     dataFormat={
-#         'User_ID':el[0],
-#         'FirstName_LastName':el[1],
-#         'User_Name':el[2],
-#         'Date_of_Joining':el[3],
-#         'No.Date of Leaving':el[4],
-#         'Last_Seen':el[5],
-#         'Last Activity':el[6],
-#     }
-#     DB.send_data(dataFormat,'ST_User_Master')
-# print('Data from User_Master_DB')
+DB.deleteTotalData('ST_User_Master')
+for el in result:
+    dataFormat={
+        'User_ID':el[0],
+        'FirstName_LastName':el[1],
+        'User_Name':el[2],
+        'Date_of_Joining':el[3],
+        'No.Date of Leaving':el[4],
+        'Last_Seen':el[5],
+        'Last Activity':el[6],
+    }
+    DB.send_data(dataFormat,'ST_User_Master')
+print('Data from User_Master_DB')
 
 # PUSHING to SHEET
 result.insert(0,['User_ID','FirstName+LastName','User_Name','Date of Joining',	'Date of Leaving','	Last Seen',	'Last Activity'])
