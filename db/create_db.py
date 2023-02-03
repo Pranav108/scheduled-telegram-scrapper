@@ -147,3 +147,33 @@ if 'ST_JWB_Data' not in existing_tables:
         }
     )
     print('create table ST_JWB_Data')
+    
+if 'ST_StoryBuilding_Data' not in existing_tables:
+    dynamodb.create_table(
+        TableName='ST_StoryBuilding_Data',
+        KeySchema=[
+            {
+                'AttributeName': 'Date',
+                'KeyType': 'HASH'  # Partition key
+            },
+            {
+                'AttributeName': 'timeStamp',
+                'KeyType': 'RANGE'  #Sort key
+            }
+        ],
+        AttributeDefinitions=[
+            {
+                'AttributeName': 'Date',
+                'AttributeType': 'S'  # Partition key
+            },
+            {
+                'AttributeName': 'timeStamp',
+                'AttributeType': 'S'  #Sort key
+            },
+        ],
+        ProvisionedThroughput={
+            'ReadCapacityUnits': 10,
+            'WriteCapacityUnits': 10
+        }
+    )
+    print('create table ST_StoryBuilding_Data')

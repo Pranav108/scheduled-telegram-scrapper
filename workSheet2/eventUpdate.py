@@ -110,25 +110,25 @@ with open(os.path.join(cur_path, 'userMaster.json'), "w") as file:
 result=makeList(userMap)
 
 # PUSHING to DynamoDB
-DB.deleteTotalData('ST_User_Master')
-for el in result:
-    dataFormat={
-        'User_ID':el[0],
-        'FirstName_LastName':el[1],
-        'User_Name':el[2],
-        'Date_of_Joining':el[3],
-        'No.Date of Leaving':el[4],
-        'Last_Seen':el[5],
-        'Last Activity':el[6],
-    }
-    DB.send_data(dataFormat,'ST_User_Master')
-print('Data from User_Master_DB')
+# DB.deleteTotalData('ST_User_Master')
+# for el in result:
+#     dataFormat={
+#         'User_ID':el[0],
+#         'FirstName_LastName':el[1],
+#         'User_Name':el[2],
+#         'Date_of_Joining':el[3],
+#         'No.Date of Leaving':el[4],
+#         'Last_Seen':el[5],
+#         'Last Activity':el[6],
+#     }
+#     DB.send_data(dataFormat,'ST_User_Master')
+# print('Data from User_Master_DB')
 
 # PUSHING to SHEET
 result.insert(0,['User_ID','FirstName+LastName','User_Name','Date of Joining',	'Date of Leaving','	Last Seen',	'Last Activity'])
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
-worksheet = sh.get_worksheet(2)
+worksheet = sh.get_worksheet(3)
 worksheet.clear()
 worksheet.append_rows(result)
 print('scrapping in workSheet2 done, successfully')

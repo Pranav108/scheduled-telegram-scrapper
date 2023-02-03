@@ -92,6 +92,6 @@ print('Data from Content_Analysis_DB')
 # PUSHING LOGIC
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
-worksheet = sh.get_worksheet(1)
+worksheet = sh.get_worksheet(2)
 worksheet.append_row(useFull)
 print('scrapping in workSheet1 done, successfully')

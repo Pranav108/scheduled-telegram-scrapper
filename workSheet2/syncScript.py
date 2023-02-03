@@ -20,6 +20,9 @@ yesterday = datetime.date.today() - datetime.timedelta(days=1)
 messageList=[]
 userMap={}
 
+with open(os.path.join(cur_path, 'userMaster.json')) as f:
+   userMap = json.load(f)
+   
 def getLastSeen(user):
     Last_Seen=user.get('status','A.NOT_AVILABLE').split('.')[1]
     if 'last_online_date' in user:
@@ -62,20 +65,21 @@ async def main():
             Date_of_Leaving='NILL_FOR_NOW'
             Last_Seen=getLastSeen(member['user'])
             Last_Message=await getLastActivity(User_ID)
-            userMap[User_ID]=[Full_Name,User_Name,Date_of_Joining,Date_of_Leaving,Last_Seen,Last_Message]
+            if User_ID not in userMap:
+                userMap[User_ID]=[Full_Name,User_Name,Date_of_Joining,Date_of_Leaving,Last_Seen,Last_Message]
 
 app.run(main())
 # print(len(messageList))
 # PUSHING to JSON
 print(len(userMap))
-# with open(os.path.join(cur_path, 'userMaster.json'), "w") as file:
-#     json.dump(userMap, file)
+with open(os.path.join(cur_path, 'userMaster.json'), "w") as file:
+    json.dump(userMap, file)
 
 # result=makeList(userMap)
 # PUSHING to SHEET
 # Run this to ONLY to clear the left members data
 # gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 # sh = gc.open_by_key(os.getenv('SHEET_ID'))
-# worksheet = sh.get_worksheet(2)
+# worksheet = sh.get_worksheet(3)
 # worksheet.append_rows(result)
 

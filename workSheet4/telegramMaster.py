@@ -74,27 +74,27 @@ rowData.insert(0,yesterday.strftime("%x"))
 #     json.dump(rowData, file)
 
 # PUSHING to DynamoDB
-dataFormat={
-    'Date':rowData[0],
-    'last_seen_recently':rowData[1],
-    'last_seen_a_week_ago':rowData[2],
-    'last_seen_a_month_ago':rowData[3],
-    'last_seen_a_long_time_ago ':rowData[4],
-    'active_on_group':rowData[5],
-    'Total_messages':rowData[6],
-    'WCB_initiated':rowData[7],
-    'JWB_initiated':rowData[8],
-    'first_message_time':rowData[9],
-    'last_message_time':rowData[10],
-    'No_of_people_joining_VC':rowData[11],
-    'Total_member_in_group':rowData[12],
-}
-DB.send_data(dataFormat,'ST_Telegram_Master')
-print('Data from Telegram_Master_DB')
+# dataFormat={
+#     'Date':rowData[0],
+#     'last_seen_recently':rowData[1],
+#     'last_seen_a_week_ago':rowData[2],
+#     'last_seen_a_month_ago':rowData[3],
+#     'last_seen_a_long_time_ago ':rowData[4],
+#     'active_on_group':rowData[5],
+#     'Total_messages':rowData[6],
+#     'WCB_initiated':rowData[7],
+#     'JWB_initiated':rowData[8],
+#     'first_message_time':rowData[9],
+#     'last_message_time':rowData[10],
+#     'No_of_people_joining_VC':rowData[11],
+#     'Total_member_in_group':rowData[12],
+# }
+# DB.send_data(dataFormat,'ST_Telegram_Master')
+# print('Data from Telegram_Master_DB')
 
 # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
-worksheet = sh.get_worksheet(4)
+worksheet = sh.get_worksheet(5)
 worksheet.append_row(rowData)
 print('scrapping in workSheet4 done, successfully')

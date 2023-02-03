@@ -1,17 +1,22 @@
-import sys,os
+import os
+import sys
+
 from dotenv import load_dotenv
+
 load_dotenv()
-from pyrogram import enums
-from pyrogram import Client
 import datetime
-import gspread
+import json
 import time
 
-import json
+import gspread
+from pyrogram import Client, enums
+
 sys.path.append(os.getcwd())
 from db.db_model import DynamoDB_con
+
 DB = DynamoDB_con()
 import re
+
 app = Client(
     "YOUR_BOT",
     api_id = os.getenv('API_ID'),
@@ -63,7 +68,15 @@ async def main():
     async with app:
         async for member in app.get_chat_members(TARGET):
             member=json.loads(str(member))
-            messageList_ID.append(member['user'].get('id'))
+            userID=member['user'].get('id')
+            # FOR JWB
+            # if 'first_name' in member['user']:
+            #     first_name=member['user'].get('first_name').split(' ')[0]
+            #     if first_name in userMap_JWB:
+            #         print(member['user'])
+            #     userMap_JWB[first_name]=userID
+                
+            messageList_ID.append(userID)
         for id in messageList_ID:
             userMap[id]=[yesterday.strftime("%x"),id,0,'N',0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
         
@@ -98,13 +111,11 @@ async def main():
                 if 'text' in message and '/start' in message['text'] and '@on9wordchainbot' in message['text']:
                     useFullMessage.append(message)
                     
-                
-                # Same logic as above two will be applied for JW bot
-                
-                # if wordOfTheDay is 'loream_ipsum_dolar_sit':
-                #      write logic to get word of the day
-                # else:
-                #     write logic to find if user userd wordOfTheDay
+                # FOR JWB
+                # if user_name=="jumble_word_bot":
+                #     txt=message['text']
+                #     if "You need atleast 2 players to play this game" in txt or "There is now" in txt:
+                #         messageList_JWB.append(message) 
                 
                 # MessageCount
                 if user_id in userMap:
@@ -125,35 +136,36 @@ async def main():
             if result:
                 userMap[user_id][4]=userMap[user_id][4]+1
             
-app.run(findWod())
+# app.run(findWod())
 app.run(main())
 
 userList=list(userMap.values())
+
 # PUSHING to JSON
 # with open(os.path.join(cur_path, 'userData.json'), "w") as file:
 #     json.dump(userList, file,indent=4)
     
 # PUSHING to DynamoDB
-for el in userList:
-    dataFormat={
-        'ID':str(time.time()*1000),
-        'Date':el[0],
-        'User_ID':el[1],
-        'No_of_message_sent':el[2],
-        'used_WOD':el[3],
-        'No._WCB_Initiated':el[4],
-        'No._WCB_Participated':el[5],
-        'No._JWB_Initiated':el[6],
-        'No._JWB_Participated':el[7],
-        'No._QuizQues_Attempted':el[8],
-        'No._QuizQues_Correct':el[9],
-    }
-    DB.send_data(dataFormat,'ST_User_Data')
-print('Data from User_Data_DB')
+# for el in userList:
+#     dataFormat={
+#         'ID':str(time.time()*1000),
+#         'Date':el[0],
+#         'User_ID':el[1],
+#         'No_of_message_sent':el[2],
+#         'used_WOD':el[3],
+#         'No._WCB_Initiated':el[4],
+#         'No._WCB_Participated':el[5],
+#         'No._JWB_Initiated':el[6],
+#         'No._JWB_Participated':el[7],
+#         'No._QuizQues_Attempted':el[8],
+#         'No._QuizQues_Correct':el[9],
+#     }
+#     DB.send_data(dataFormat,'ST_User_Data')
+# print('Data from User_Data_DB')
 
-# PUSHING to SHEET
-gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
-sh = gc.open_by_key(os.getenv('SHEET_ID'))
-worksheet = sh.get_worksheet(3)
-worksheet.append_rows(userList)
-print('scrapping in workSheet3 done, successfully')
+# # PUSHING to SHEET
+# gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
+# sh = gc.open_by_key(os.getenv('SHEET_ID'))
+# worksheet = sh.get_worksheet(4)
+# worksheet.append_rows(userList)
+# print('scrapping in workSheet3 done, successfully')

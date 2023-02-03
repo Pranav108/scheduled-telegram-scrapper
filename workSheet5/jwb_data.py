@@ -21,7 +21,7 @@ def refactor(obj):
 yesterday=yesterday.strftime('%Y-%m-%d')
 sheetData=DB.read_data('ST_JWB_Data',yesterday)
 sheetData=list(map(refactor,sheetData))
-print(sheetData)
+# print(sheetData)
 
 # with open('workSheet5/messageList.json') as f:
 #    sheetData = json.load(f)
@@ -32,6 +32,6 @@ print(sheetData)
 # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
-worksheet = sh.get_worksheet(5)
+worksheet = sh.get_worksheet(6)
 worksheet.append_rows(sheetData)
-print('scrapping in workSheet6 done, successfully')
+print('scrapping in workSheet5 done, successfully')
