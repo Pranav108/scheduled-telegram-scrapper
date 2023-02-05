@@ -136,7 +136,7 @@ async def main():
             if result:
                 userMap[user_id][4]=userMap[user_id][4]+1
             
-# app.run(findWod())
+app.run(findWod())
 app.run(main())
 
 userList=list(userMap.values())
@@ -164,8 +164,8 @@ userList=list(userMap.values())
 # print('Data from User_Data_DB')
 
 # # PUSHING to SHEET
-# gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
-# sh = gc.open_by_key(os.getenv('SHEET_ID'))
-# worksheet = sh.get_worksheet(4)
-# worksheet.append_rows(userList)
-# print('scrapping in workSheet3 done, successfully')
+gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
+sh = gc.open_by_key(os.getenv('SHEET_ID'))
+worksheet = sh.get_worksheet(4)
+worksheet.append_rows(userList)
+print('scrapping in workSheet3 done, successfully')
