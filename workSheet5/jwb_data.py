@@ -25,6 +25,7 @@ sheetData=list(map(refactor,sheetData))
 
 # with open('workSheet5/messageList.json') as f:
 #    sheetData = json.load(f)
+# PUSHING TO DynamoDB(FOR TESTING ONLY)
 # for el in sheetData:
 #     DB.send_data(el,'ST_JWB_Data')
 # print('Data from JWB_DATA_DB')

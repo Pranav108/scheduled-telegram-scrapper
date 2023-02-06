@@ -146,22 +146,22 @@ userList=list(userMap.values())
 #     json.dump(userList, file,indent=4)
     
 # PUSHING to DynamoDB
-# for el in userList:
-#     dataFormat={
-#         'ID':str(time.time()*1000),
-#         'Date':el[0],
-#         'User_ID':el[1],
-#         'No_of_message_sent':el[2],
-#         'used_WOD':el[3],
-#         'No._WCB_Initiated':el[4],
-#         'No._WCB_Participated':el[5],
-#         'No._JWB_Initiated':el[6],
-#         'No._JWB_Participated':el[7],
-#         'No._QuizQues_Attempted':el[8],
-#         'No._QuizQues_Correct':el[9],
-#     }
-#     DB.send_data(dataFormat,'ST_User_Data')
-# print('Data from User_Data_DB')
+for el in userList:
+    dataFormat={
+        'ID':str(time.time()*1000),
+        'Date':el[0],
+        'User_ID':el[1],
+        'No_of_message_sent':el[2],
+        'used_WOD':el[3],
+        'No._WCB_Initiated':el[4],
+        'No._WCB_Participated':el[5],
+        'No._JWB_Initiated':el[6],
+        'No._JWB_Participated':el[7],
+        'No._QuizQues_Attempted':el[8],
+        'No._QuizQues_Correct':el[9],
+    }
+    DB.send_data(dataFormat,'ST_User_Data')
+print('Data from User_Data_DB')
 
 # # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))

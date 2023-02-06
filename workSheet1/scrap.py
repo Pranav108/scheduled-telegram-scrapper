@@ -30,7 +30,7 @@ async def scrap():
                 break
             global messageCount,botInitiatedCount
             message=json.loads(str(message))
-            if('text' in message):
+            if('text' in message or 'caption' in message):
                 messageTime=message['date'].split(" ")[1]
                 messageHour=int(messageTime.split(":")[0])
                 useFull[(messageHour+17)%24]=useFull[(messageHour+17)%24]+1

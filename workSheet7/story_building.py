@@ -37,7 +37,7 @@ sheetData=list(map(refactor,sheetData))
 with open('workSheet7/DB_data.json', "w") as file:
     json.dump(sheetData, file,indent=4)
 
-# PushIng to DynamoDB
+# PushIng to DynamoDB(FOR TESTING ONLY)
 # for el in sheetData:
 #     obj={
 #         'Date':el[0].split('T')[0],
