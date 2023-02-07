@@ -6,7 +6,9 @@ from pyrogram import Client
 import datetime
 import gspread
 import json
-
+sys.path.append(os.getcwd())
+from db.db_model import DynamoDB_con
+DB = DynamoDB_con()
 
 app = Client(
     "YOUR_BOT",
@@ -74,10 +76,22 @@ app.run(main())
 # with open('messageList.json', "w") as file:
 #     json.dump(messageList, file)
 
+# PUSHING to DynamoDB
+print(sheetData)
+for el in sheetData:
+    print(el)
+    dataFormat={
+        'Datetime':el[0],
+        'WordChainBot_InitiatedByUser_ID':el[1],
+        'participantCount':el[2],
+        'Success':el[3],
+    }
+    DB.send_data(dataFormat,'ST_WCB_Data')
+print('Data from WCB_Data_DB')
     
 # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
-worksheet = sh.get_worksheet(6)
+worksheet = sh.get_worksheet(7)
 worksheet.append_rows(sheetData)
-print('scrapping in wordsheet6 done, successfully')
+print('scrapping in workSheet6 done, successfully')

@@ -6,6 +6,9 @@ import datetime
 import gspread
 
 import json
+sys.path.append(os.getcwd())
+from db.db_model import DynamoDB_con
+DB = DynamoDB_con()
 app = Client(
     "YOUR_BOT",
     api_id = os.getenv('API_ID'),
@@ -36,22 +39,26 @@ async def main():
                     rowData[3]=rowData[3]+1
             memberList.append(member)
             
-            
         async for message in app.get_chat_history(TARGET): 
             if(message.date.date()>yesterday):
                 continue
             if(message.date.date()<yesterday):
                 break
             message=json.loads(str(message))
+            typeOfUser=''
+            if 'from_user' in message:
+                typeOfUser='from_user'
+            else:
+                typeOfUser='sender_chat'
             if('text' in message):
-                if(('from_user' in message) and message['from_user'].get('username')=="on9wordchainbot" and ('Turn order:' in message['text'])):
+                if(message[typeOfUser].get('username')=="on9wordchainbot" and ('Turn order:' in message['text'])):
                    WCBinitatedCount=WCBinitatedCount+1
-                if(('from_user' in message) and message['from_user'].get('username')=="jumble_word_bot" and ('Here is the first word' in message['text'])):
+                if(message[typeOfUser].get('username')=="jumble_word_bot" and ('Here is the first word' in message['text'])):
                     JWB_initiatedCount=JWB_initiatedCount+1   
-                if 'from_user' in message :
-                    userSet.add(message['from_user'].get('id'))
-                elif 'sender_chat' in message:
-                    userSet.add(message['sender_chat'].get('id'))
+                userSet.add(message[typeOfUser].get('id'))
+                messageList.append(message)
+            if 'caption' in message:
+                userSet.add(message[typeOfUser].get('id'))
                 messageList.append(message)
 
 # Column for OFFLINE and ONLINE can also be add
@@ -69,9 +76,28 @@ rowData.insert(0,yesterday.strftime("%x"))
 # with open('telegramMaster.json', "w") as file:
 #     json.dump(rowData, file)
 
+# PUSHING to DynamoDB
+dataFormat={
+    'Date':rowData[0],
+    'last_seen_recently':rowData[1],
+    'last_seen_a_week_ago':rowData[2],
+    'last_seen_a_month_ago':rowData[3],
+    'last_seen_a_long_time_ago ':rowData[4],
+    'active_on_group':rowData[5],
+    'Total_messages':rowData[6],
+    'WCB_initiated':rowData[7],
+    'JWB_initiated':rowData[8],
+    'first_message_time':rowData[9],
+    'last_message_time':rowData[10],
+    'No_of_people_joining_VC':rowData[11],
+    'Total_member_in_group':rowData[12],
+}
+DB.send_data(dataFormat,'ST_Telegram_Master')
+print('Data from Telegram_Master_DB')
+
 # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
-worksheet = sh.get_worksheet(4)
+worksheet = sh.get_worksheet(5)
 worksheet.append_row(rowData)
-print('scrapping in wordsheet4 done, successfully')
+print('scrapping in workSheet4 done, successfully')
