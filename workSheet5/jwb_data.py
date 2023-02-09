@@ -11,24 +11,22 @@ DB = DynamoDB_con()
 
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 def refactor(obj):
-    timeStamp=obj['DateTimeStamp'].split('.')[0]
-    Success=obj['Success']
+    timeStamp=obj['Datetime'].split('.')[0]
+    Success='N'
     JumbledWord_InitiatedByUser_ID=int(obj['JumbledWord_InitiatedByUser_ID'])
     JumbledWord_Participation=int(obj['JumbledWord_Participation'])
+    if JumbledWord_Participation>1:
+        Success='Y' 
     return [timeStamp,JumbledWord_InitiatedByUser_ID,JumbledWord_Participation,Success]
 
 # READING FROM DynamoDB
 yesterday=yesterday.strftime('%Y-%m-%d')
-sheetData=DB.read_data('ST_JWB_Data',yesterday)
+sheetData=DB.read_data('TB_JumbledWord_Engagement','Date',yesterday)
 sheetData=list(map(refactor,sheetData))
 # print(sheetData)
 
-# with open('workSheet5/messageList.json') as f:
-#    sheetData = json.load(f)
-# PUSHING TO DynamoDB(FOR TESTING ONLY)
-# for el in sheetData:
-#     DB.send_data(el,'ST_JWB_Data')
-# print('Data from JWB_DATA_DB')
+with open('workSheet5/jwb_game_list.json', "w") as file:
+    json.dump(sheetData, file,indent=4)
 
 # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))

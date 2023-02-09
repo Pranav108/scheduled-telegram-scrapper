@@ -32,9 +32,13 @@ def WCB_Data():
     workSheet6 = os.path.join(root_cur_path, 'workSheet6/wcb_data.py')
     os.system('python ' + workSheet6)
 
-def storyBuilding():
-    workSheet7 = os.path.join(root_cur_path, 'workSheet7/story_building.py')
+def quizBotEngagement():
+    workSheet7 = os.path.join(root_cur_path, 'workSheet7/quiz_botEng.py')
     os.system('python ' + workSheet7)
+    
+def storyBuilding():
+    workSheet8 = os.path.join(root_cur_path, 'workSheet8/story_building.py')
+    os.system('python ' + workSheet8)
 
 def parentCaller():
     contentAnalysis()
@@ -48,6 +52,8 @@ def parentCaller():
     JWB_Data()
     time.sleep(20)
     WCB_Data()
+    time.sleep(20)
+    quizBotEngagement()
     time.sleep(20)
     storyBuilding()
     print('All sheet updated')

@@ -14,7 +14,7 @@ yesterday = datetime.date.today() - datetime.timedelta(days=1)
 
 with open('workSheet2/userMaster.json') as f:
    userMasterData = json.load(f)
-   
+# for push in sheet
 def refactor(obj):
     timeStamp=obj['timeStamp'].split('.')[0].replace('T',' ')
     success='N'
@@ -29,21 +29,29 @@ def refactor(obj):
         fullName=userMasterData[InitiatedByUser_ID][0]
     return [timeStamp,InitiatedByUser_ID,fullName,participation_count,success]
 
+#for push in my DB table 
+# def refactor(obj):
+#     timeStamp=obj['timestamp'],
+#     InitiatedByUser_ID=str(obj['user_id'])
+#     participation_count=int(obj['n_participants'])
+#     return [''.join(timeStamp),InitiatedByUser_ID,participation_count]
+
 # READING FROM DynamoDB
 yesterday=yesterday.strftime('%Y-%m-%d')
-sheetData=DB.read_data('ST_StoryBuilding_Data',yesterday)
+sheetData=DB.read_data('ST_StoryBuilding_Data','Date',yesterday)
+# sheetData=DB.read_data('TB_StoryBuilding_Data',yesterday)
 sheetData=list(map(refactor,sheetData))
 
-with open('workSheet7/DB_data.json', "w") as file:
+with open('workSheet8/DB_data.json', "w") as file:
     json.dump(sheetData, file,indent=4)
 
 # PushIng to DynamoDB(FOR TESTING ONLY)
 # for el in sheetData:
 #     obj={
-#         'Date':el[0].split('T')[0],
+#         'Date':el[0].split('.')[0].split('T')[0],
 #         'timeStamp':el[0],
 #         'initiated_by':el[1],
-#         'participation_count':el[3]
+#         'participation_count':el[2]
 #     }
 #     DB.send_data(obj,'ST_StoryBuilding_Data')
 # print('Data from StoryBuilding_DB')
@@ -53,4 +61,4 @@ gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.jso
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
 worksheet = sh.get_worksheet(9)
 worksheet.append_rows(sheetData)
-print('scrapping in workSheet7 done, successfully')
+print('scrapping in workSheet8 done, successfully')
