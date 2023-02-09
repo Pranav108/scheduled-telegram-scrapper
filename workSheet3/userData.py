@@ -1,21 +1,15 @@
-import os
-import sys
-
+import sys,os
 from dotenv import load_dotenv
-
 load_dotenv()
 import datetime
 import json
 import time
-
 import gspread
+import re
 from pyrogram import Client, enums
-
 sys.path.append(os.getcwd())
 from db.db_model import DynamoDB_con
-
 DB = DynamoDB_con()
-import re
 
 app = Client(
     "YOUR_BOT",
@@ -27,11 +21,24 @@ TARGET='jobcoach_kannada'
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 userList=[]
 messageList_ID=[]
-wordOfTheDay='NO_WORD_YET'
+# wordOfTheDay='reality'
 userMap={
-    -1001636582068:[yesterday.strftime("%x"),-1001636582068,0,'N',0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
+    -1001636582068:[yesterday.strftime("%x"),-1001636582068,0,'N',0,0,0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
     }
 useFullMessage=[]
+jwb_data=[]
+
+def refactor(obj):
+    print(obj)
+    JumbledWord_InitiatedByUser_ID=int(obj['JumbledWord_InitiatedByUser_ID'])
+    participants=obj['participants_ids'][:-1].split(',')
+    if JumbledWord_InitiatedByUser_ID in userMap:
+        userMap[JumbledWord_InitiatedByUser_ID][6]=userMap[JumbledWord_InitiatedByUser_ID][6]+1
+    for el in participants:
+        participant=int(el)
+        if participant in userMap:
+            userMap[participant][7]=userMap[participant][7]+1
+    return 0
 
 def checkValid(i, arr):
     user_id=0
@@ -68,17 +75,10 @@ async def main():
     async with app:
         async for member in app.get_chat_members(TARGET):
             member=json.loads(str(member))
-            userID=member['user'].get('id')
-            # FOR JWB
-            # if 'first_name' in member['user']:
-            #     first_name=member['user'].get('first_name').split(' ')[0]
-            #     if first_name in userMap_JWB:
-            #         print(member['user'])
-            #     userMap_JWB[first_name]=userID
-                
+            userID=member['user'].get('id')                
             messageList_ID.append(userID)
         for id in messageList_ID:
-            userMap[id]=[yesterday.strftime("%x"),id,0,'N',0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
+            userMap[id]=[yesterday.strftime("%x"),id,0,'N',0,0,0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
         
         async for message in app.get_chat_history(TARGET): 
             if(message.date.date()>yesterday):
@@ -110,13 +110,7 @@ async def main():
                 # No._WCB_Initiated
                 if 'text' in message and '/start' in message['text'] and '@on9wordchainbot' in message['text']:
                     useFullMessage.append(message)
-                    
-                # FOR JWB
-                # if user_name=="jumble_word_bot":
-                #     txt=message['text']
-                #     if "You need atleast 2 players to play this game" in txt or "There is now" in txt:
-                #         messageList_JWB.append(message) 
-                
+
                 # MessageCount
                 if user_id in userMap:
                     userMap[user_id][2]=userMap[user_id][2]+1
@@ -135,7 +129,13 @@ async def main():
             i,result,user_id=checkValid(i,useFullMessage)
             if result:
                 userMap[user_id][4]=userMap[user_id][4]+1
-            
+         
+        # to get JWB data
+        yesterday_str=yesterday.strftime('%Y-%m-%d')
+        jwb_data=DB.read_data('TB_JumbledWord_Engagement','Date',yesterday_str)
+        for el in jwb_data:
+            refactor(el)
+        
 app.run(findWod())
 app.run(main())
 
