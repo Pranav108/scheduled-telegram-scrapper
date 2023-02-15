@@ -31,6 +31,6 @@ with open('workSheet5/jwb_game_list.json', "w") as file:
 # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
-worksheet = sh.get_worksheet(6)
+worksheet = sh.worksheet('JWB_Data')
 worksheet.append_rows(sheetData)
 print('scrapping in workSheet5 done, successfully')

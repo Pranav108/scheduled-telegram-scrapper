@@ -98,6 +98,6 @@ print('Data from Telegram_Master_DB')
 # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
-worksheet = sh.get_worksheet(5)
+worksheet = sh.worksheet('Telegram_Master')
 worksheet.append_row(rowData)
 print('scrapping in workSheet4 done, successfully')

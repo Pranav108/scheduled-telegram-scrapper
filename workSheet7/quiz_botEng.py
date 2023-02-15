@@ -34,6 +34,6 @@ with open('workSheet7/quiz_number.json', "w") as file:
 # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
-worksheet = sh.get_worksheet(8)
+worksheet = sh.worksheet('Quiz_Data')
 worksheet.append_rows(sheetData)
 print('scrapping in workSheet7 done, successfully')

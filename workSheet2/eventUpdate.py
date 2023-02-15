@@ -109,7 +109,6 @@ with open(os.path.join(cur_path, 'userMaster.json'), "w") as file:
 
 result=makeList(userMap)
 
-# PUSHING to DynamoDB
 DB.deleteTotalData('ST_User_Master')
 for el in result:
     dataFormat={
@@ -128,7 +127,7 @@ print('Data from User_Master_DB')
 result.insert(0,['User_ID','FirstName+LastName','User_Name','Date of Joining',	'Date of Leaving','	Last Seen',	'Last Activity'])
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
-worksheet = sh.get_worksheet(3)
+worksheet = sh.worksheet('User_Master')
 worksheet.clear()
 worksheet.append_rows(result)
 print('scrapping in workSheet2 done, successfully')

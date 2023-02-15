@@ -21,14 +21,14 @@ TARGET='jobcoach_kannada'
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 userList=[]
 messageList_ID=[]
-# wordOfTheDay='reality'
+wordOfTheDay='NO_WORD_YET'
 userMap={
     -1001636582068:[yesterday.strftime("%x"),-1001636582068,0,'N',0,0,0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
     }
 useFullMessage=[]
 jwb_data=[]
 
-def refactor(obj):
+def refactor_JWB(obj):
     print(obj)
     JumbledWord_InitiatedByUser_ID=int(obj['JumbledWord_InitiatedByUser_ID'])
     participants=obj['participants_ids'][:-1].split(',')
@@ -38,7 +38,17 @@ def refactor(obj):
         participant=int(el)
         if participant in userMap:
             userMap[participant][7]=userMap[participant][7]+1
-    return 0
+
+def refactor_SBB(obj):
+    print(obj)
+    SBB_InitiatedByUser_ID=int(obj['user_id'])
+    participants=obj['participants'].split(',')
+    if SBB_InitiatedByUser_ID in userMap:
+        userMap[SBB_InitiatedByUser_ID][8]=userMap[SBB_InitiatedByUser_ID][8]+1
+    for el in participants:
+        participant=int(el)
+        if participant in userMap:
+            userMap[participant][9]=userMap[participant][9]+1
 
 def checkValid(i, arr):
     user_id=0
@@ -134,7 +144,13 @@ async def main():
         yesterday_str=yesterday.strftime('%Y-%m-%d')
         jwb_data=DB.read_data('TB_JumbledWord_Engagement','Date',yesterday_str)
         for el in jwb_data:
-            refactor(el)
+            refactor_JWB(el)
+            
+        # to get StoryBuilding data
+        sbb_data=DB.read_data('TB_StoryBuilding_Data','date',yesterday_str)
+        for el in sbb_data:
+            refactor_SBB(el)
+        
         
 app.run(findWod())
 app.run(main())
@@ -166,6 +182,6 @@ print('Data from User_Data_DB')
 # # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
-worksheet = sh.get_worksheet(4)
+worksheet = sh.worksheet('User_Data')
 worksheet.append_rows(userList)
 print('scrapping in workSheet3 done, successfully')

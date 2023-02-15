@@ -92,6 +92,6 @@ print('Data from WCB_Data_DB')
 # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 sh = gc.open_by_key(os.getenv('SHEET_ID'))
-worksheet = sh.get_worksheet(7)
+worksheet = sh.worksheet('WCB_Data')
 worksheet.append_rows(sheetData)
 print('scrapping in workSheet6 done, successfully')

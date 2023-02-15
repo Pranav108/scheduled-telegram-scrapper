@@ -80,6 +80,6 @@ with open(os.path.join(cur_path, 'userMaster.json'), "w") as file:
 # Run this to ONLY to clear the left members data
 # gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 # sh = gc.open_by_key(os.getenv('SHEET_ID'))
-# worksheet = sh.get_worksheet(3)
+# worksheet = sh.worksheet('User_Master)
 # worksheet.append_rows(result)
 
