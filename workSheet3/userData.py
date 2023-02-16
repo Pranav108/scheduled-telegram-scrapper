@@ -21,15 +21,18 @@ TARGET='jobcoach_kannada'
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 userList=[]
 messageList_ID=[]
-wordOfTheDay='NO_WORD_YET'
-userMap={
-    -1001636582068:[yesterday.strftime("%x"),-1001636582068,0,'N',0,0,0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
-    }
 useFullMessage=[]
 jwb_data=[]
+quiz_number=0
+wordOfTheDay='NO_WORD_YET'
+userMap={
+    -1001636582068:[yesterday.strftime("%x"),-1001636582068,0,'N',0,0,0,0,0,0,0,0]
+    }
 
+with open('workSheet3/quiz_number.json') as f:
+   quiz_number = json.load(f)[0]+1
+   
 def refactor_JWB(obj):
-    print(obj)
     JumbledWord_InitiatedByUser_ID=int(obj['JumbledWord_InitiatedByUser_ID'])
     participants=obj['participants_ids'][:-1].split(',')
     if JumbledWord_InitiatedByUser_ID in userMap:
@@ -40,7 +43,6 @@ def refactor_JWB(obj):
             userMap[participant][7]=userMap[participant][7]+1
 
 def refactor_SBB(obj):
-    print(obj)
     SBB_InitiatedByUser_ID=int(obj['user_id'])
     participants=obj['participants'].split(',')
     if SBB_InitiatedByUser_ID in userMap:
@@ -50,6 +52,21 @@ def refactor_SBB(obj):
         if participant in userMap:
             userMap[participant][9]=userMap[participant][9]+1
 
+def refactor_quizSession(obj):
+    user_id=int(obj['user_id'])
+    scores=obj['scores']
+    QuizQues_Attempted=QuizQues_Correct=0
+    for el in scores:
+        if el is not None:
+            QuizQues_Attempted=QuizQues_Attempted+1
+            if el == 1:
+                QuizQues_Correct=QuizQues_Correct+1
+    if user_id in userMap:
+        userMap[user_id][10]=QuizQues_Attempted
+        userMap[user_id][11]=QuizQues_Correct
+    else:
+        print('cannot find user-data for quiz session')
+            
 def checkValid(i, arr):
     user_id=0
     while i < len(arr) :
@@ -88,7 +105,7 @@ async def main():
             userID=member['user'].get('id')                
             messageList_ID.append(userID)
         for id in messageList_ID:
-            userMap[id]=[yesterday.strftime("%x"),id,0,'N',0,0,0,0,0,0,'NOT_AVAILABLE','NOT_AVAILABLE']
+            userMap[id]=[yesterday.strftime("%x"),id,0,'N',0,0,0,0,0,0,0,0]
         
         async for message in app.get_chat_history(TARGET): 
             if(message.date.date()>yesterday):
@@ -151,16 +168,19 @@ async def main():
         for el in sbb_data:
             refactor_SBB(el)
         
+        # to get quizBot session
+        quizSession_data=DB.read_data('TB_QuizBot_Session','quiz_no',quiz_number)
+        for el in quizSession_data:
+            refactor_quizSession(el)
         
 app.run(findWod())
 app.run(main())
 
 userList=list(userMap.values())
 
-# PUSHING to JSON
-# with open(os.path.join(cur_path, 'userData.json'), "w") as file:
-#     json.dump(userList, file,indent=4)
-    
+with open('workSheet3/quiz_number.json', "w") as file:
+    json.dump([quiz_number], file,indent=4)
+        
 # PUSHING to DynamoDB
 for el in userList:
     dataFormat={
@@ -173,8 +193,10 @@ for el in userList:
         'No._WCB_Participated':el[5],
         'No._JWB_Initiated':el[6],
         'No._JWB_Participated':el[7],
-        'No._QuizQues_Attempted':el[8],
-        'No._QuizQues_Correct':el[9],
+        'No._SBB_Initiated':el[8],
+        'No._SBB_Participated':el[9],
+        'No._QuizQues_Attempted':el[10],
+        'No._QuizQues_Correct':el[11],
     }
     DB.send_data(dataFormat,'ST_User_Data')
 print('Data from User_Data_DB')

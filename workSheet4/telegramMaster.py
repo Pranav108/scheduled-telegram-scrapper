@@ -19,13 +19,13 @@ yesterday = datetime.date.today() - datetime.timedelta(days=1)
 memberList=[]
 messageList=[]
 userSet=set()
-personCount=WCBinitatedCount=JWB_initiatedCount=0
-rowData=[0,0,0,0,'MSG',0,0,'MSG',0,0,'NIL']
+personCount=WCBinitatedCount=JWB_initiatedCount=SBB_initiatedCount=0
+rowData=[0,0,0,0,0,0,0,0,0,0,0,'NIL']
 async def main():
     async with app:
         async for member in app.get_chat_members(TARGET):
             member=json.loads(str(member))
-            global personCount,WCBinitatedCount,JWB_initiatedCount
+            global personCount,WCBinitatedCount
             if 'status' in member['user']:
                 personCount=personCount+1
                 status=member['user'].get('status').split('.')[1]
@@ -53,13 +53,26 @@ async def main():
             if('text' in message):
                 if(message[typeOfUser].get('username')=="on9wordchainbot" and ('Turn order:' in message['text'])):
                    WCBinitatedCount=WCBinitatedCount+1
-                if(message[typeOfUser].get('username')=="jumble_word_bot" and ('Here is the first word' in message['text'])):
-                    JWB_initiatedCount=JWB_initiatedCount+1   
                 userSet.add(message[typeOfUser].get('id'))
                 messageList.append(message)
             if 'caption' in message:
                 userSet.add(message[typeOfUser].get('id'))
                 messageList.append(message)
+        global JWB_initiatedCount,SBB_initiatedCount
+        yesterday_str=yesterday.strftime('%Y-%m-%d')
+        # to get JumbledWordBot data
+        jwb_data=DB.read_data('TB_JumbledWord_Engagement','Date',yesterday_str)
+        for el in jwb_data:
+            participants_count=int(el['JumbledWord_Participation'])
+            if participants_count>1:
+                JWB_initiatedCount=JWB_initiatedCount+1
+            
+        # to get StoryBuilding data
+        sbb_data=DB.read_data('TB_StoryBuilding_Data','date',yesterday_str)
+        for el in sbb_data:
+            participants_count=int(el['n_participants'])
+            if participants_count>1:
+                SBB_initiatedCount=SBB_initiatedCount+1
 
 # Column for OFFLINE and ONLINE can also be add
 app.run(main())
@@ -67,8 +80,9 @@ rowData[4]=len(userSet)
 rowData[5]=len(messageList)
 rowData[6]=WCBinitatedCount
 rowData[7]=JWB_initiatedCount
-rowData[8]=messageList[len(messageList)-1].get('date')
-rowData[9]=messageList[0].get('date')
+rowData[8]=SBB_initiatedCount
+rowData[9]=messageList[len(messageList)-1].get('date')
+rowData[10]=messageList[0].get('date')
 rowData.append(personCount)
 rowData.insert(0,yesterday.strftime("%x"))
 
@@ -87,10 +101,10 @@ dataFormat={
     'Total_messages':rowData[6],
     'WCB_initiated':rowData[7],
     'JWB_initiated':rowData[8],
-    'first_message_time':rowData[9],
-    'last_message_time':rowData[10],
-    'No_of_people_joining_VC':rowData[11],
-    'Total_member_in_group':rowData[12],
+    'SBB_initiated':rowData[9],
+    'first_message_time':rowData[10],
+    'last_message_time':rowData[11],
+    'Total_member_in_group':rowData[13],
 }
 DB.send_data(dataFormat,'ST_Telegram_Master')
 print('Data from Telegram_Master_DB')
