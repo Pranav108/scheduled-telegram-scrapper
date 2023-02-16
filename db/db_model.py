@@ -14,7 +14,6 @@ class DynamoDB_con():
     def send_data(self, data, tableName):
         db = self.dynamo_client.Table(tableName)
         db.put_item(Item=data)
-        print('Data is sending to the database!!!!')
     def read_data(self, tableName,keyValue,queryValue):
         table = self.dynamo_client.Table(tableName)
         if tableName=='TB_StoryBuilding_Data':

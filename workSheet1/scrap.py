@@ -85,6 +85,7 @@ dataFormat={
     '06:00 - 06:59':useFull[29],
     'Total_Message':useFull[30],
     'Total_Message_In_Day':useFull[31],
+    'WCB_initiated_count_per_day':useFull[32]
 }
 DB.send_data(dataFormat,'ST_Content_Analysis')
 print('Data from Content_Analysis_DB')
