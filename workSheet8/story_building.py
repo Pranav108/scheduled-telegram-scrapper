@@ -35,9 +35,6 @@ sheetData=DB.read_data('TB_StoryBuilding_Data','date',yesterday)
 sheetData=list(map(refactor,sheetData))
 sheetData.sort()
 
-with open('workSheet8/DB_data.json', "w") as file:
-    json.dump(sheetData, file,indent=4)
-
 # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
 sh = gc.open_by_key(os.getenv('SHEET_ID'))

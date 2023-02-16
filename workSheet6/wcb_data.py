@@ -72,10 +72,6 @@ async def main():
                             
 app.run(main())
 
-# PUSHING to JSON
-# with open('messageList.json', "w") as file:
-#     json.dump(messageList, file)
-
 # PUSHING to DynamoDB
 print(sheetData)
 for el in sheetData:

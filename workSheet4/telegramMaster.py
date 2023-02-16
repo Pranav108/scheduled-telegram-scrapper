@@ -74,7 +74,6 @@ async def main():
             if participants_count>1:
                 SBB_initiatedCount=SBB_initiatedCount+1
 
-# Column for OFFLINE and ONLINE can also be add
 app.run(main())
 rowData[4]=len(userSet)
 rowData[5]=len(messageList)
@@ -85,10 +84,6 @@ rowData[9]=messageList[len(messageList)-1].get('date')
 rowData[10]=messageList[0].get('date')
 rowData.append(personCount)
 rowData.insert(0,yesterday.strftime("%x"))
-
-# PUSHING to JSON
-# with open('telegramMaster.json', "w") as file:
-#     json.dump(rowData, file)
 
 # PUSHING to DynamoDB
 dataFormat={

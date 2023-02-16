@@ -23,10 +23,6 @@ def refactor(obj):
 yesterday=yesterday.strftime('%Y-%m-%d')
 sheetData=DB.read_data('TB_JumbledWord_Engagement','Date',yesterday)
 sheetData=list(map(refactor,sheetData))
-# print(sheetData)
-
-with open('workSheet5/jwb_game_list.json', "w") as file:
-    json.dump(sheetData, file,indent=4)
 
 # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
