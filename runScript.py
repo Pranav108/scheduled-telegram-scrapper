@@ -59,4 +59,4 @@ def parentCaller():
     print('All sheet updated')
     
 schedule.every().day.at(os.getenv('running_time')).do(parentCaller)
-schedule.run_all(delay_seconds=10)
+schedule.run_all(delay_seconds=86400)
