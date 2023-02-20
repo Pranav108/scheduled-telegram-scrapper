@@ -15,7 +15,7 @@ app = Client(
     api_id = os.getenv('API_ID'),
     api_hash = os.getenv('API_HASH')
 )
-TARGET='jobcoach_kannada'
+group_chat_id=os.getenv('GROUP_CHAT_ID')
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 messageList=[]
 userMap={}
@@ -34,7 +34,7 @@ def getLastSeen(user):
             
 async def getLastActivity(user_id):
     Last_Message='NO_ACTIVITY'
-    async for lastMessage in app.search_messages(TARGET, limit=1,from_user=user_id):
+    async for lastMessage in app.search_messages(group_chat_id, limit=1,from_user=user_id):
         lastMessage=json.loads(str(lastMessage))
         if lastMessage:
             Last_Message = lastMessage['date'].split(' ')[0]
@@ -51,7 +51,7 @@ def makeList(userMap):
 
 async def main():
     async with app:
-        async for member in app.get_chat_members(TARGET):
+        async for member in app.get_chat_members(group_chat_id):
             member=json.loads(str(member))
             User_ID=member['user'].get('id')
             User_Name=member['user'].get('username','NOT_AVL')

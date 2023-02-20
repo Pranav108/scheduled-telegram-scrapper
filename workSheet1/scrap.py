@@ -16,14 +16,14 @@ app = Client(
 )
 todayDate = datetime.date.today()
 yesterday = todayDate - datetime.timedelta(days=1)
-TARGET='jobcoach_kannada'
+group_chat_id=os.getenv('GROUP_CHAT_ID')
 useFull=[0]*24
 indexAdder=messageSum=messageCount=botInitiatedCount=0
 
 # SCRAPPING LOGIC
 async def scrap():
     async with app:
-        async for message in app.get_chat_history(TARGET):
+        async for message in app.get_chat_history(group_chat_id):
             if(message.date.date()>yesterday):
                 continue
             if(message.date.date()<yesterday):

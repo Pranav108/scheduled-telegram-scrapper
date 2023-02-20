@@ -17,7 +17,7 @@ app = Client(
     api_hash = os.getenv('API_HASH')
 )
 cur_path = os.path.dirname(__file__)
-TARGET='jobcoach_kannada'
+group_chat_id=os.getenv('GROUP_CHAT_ID')
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 userList=[]
 messageList_ID=[]
@@ -89,7 +89,7 @@ def checkValid(i, arr):
         
 async def findWod():
     async with app:
-        async for message in app.search_messages(chat_id=TARGET,query='Word of the day' ,filter=enums.MessagesFilter.ANIMATION,limit=1):
+        async for message in app.search_messages(chat_id=group_chat_id,query='Word of the day' ,filter=enums.MessagesFilter.ANIMATION,limit=1):
             message=json.loads(str(message))
             global wordOfTheDay
             messageTxt = message.get('caption')
@@ -100,14 +100,14 @@ async def findWod():
 
 async def main():
     async with app:
-        async for member in app.get_chat_members(TARGET):
+        async for member in app.get_chat_members(group_chat_id):
             member=json.loads(str(member))
             userID=member['user'].get('id')                
             messageList_ID.append(userID)
         for id in messageList_ID:
             userMap[id]=[yesterday.strftime("%x"),id,0,'N',0,0,0,0,0,0,0,0]
         
-        async for message in app.get_chat_history(TARGET): 
+        async for message in app.get_chat_history(group_chat_id): 
             if(message.date.date()>yesterday):
                 continue
             if(message.date.date()<yesterday):
@@ -174,7 +174,7 @@ async def main():
             refactor_quizSession(el)
         
 app.run(findWod())
-app.run(main())
+# app.run(main())
 
 userList=list(userMap.values())
 

@@ -15,13 +15,13 @@ app = Client(
     api_id = os.getenv('API_ID'),
     api_hash = os.getenv('API_HASH')
 )
-TARGET='jobcoach_kannada'
+group_chat_id=os.getenv('GROUP_CHAT_ID')
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 messageList=[]
 sheetData=[]
 async def main():
     async with app:
-        async for message in app.get_chat_history(TARGET): 
+        async for message in app.get_chat_history(group_chat_id): 
             if(message.date.date()>yesterday):
                 continue
             if(message.date.date()<yesterday):

@@ -14,7 +14,7 @@ app = Client(
     api_id = os.getenv('API_ID'),
     api_hash = os.getenv('API_HASH')
 )
-TARGET='jobcoach_kannada'
+group_chat_id=os.getenv('GROUP_CHAT_ID')
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 memberList=[]
 messageList=[]
@@ -23,7 +23,7 @@ personCount=WCBinitatedCount=JWB_initiatedCount=SBB_initiatedCount=0
 rowData=[0,0,0,0,0,0,0,0,0,0,0,'NIL']
 async def main():
     async with app:
-        async for member in app.get_chat_members(TARGET):
+        async for member in app.get_chat_members(group_chat_id):
             member=json.loads(str(member))
             global personCount,WCBinitatedCount
             if 'status' in member['user']:
@@ -39,7 +39,7 @@ async def main():
                     rowData[3]=rowData[3]+1
             memberList.append(member)
             
-        async for message in app.get_chat_history(TARGET): 
+        async for message in app.get_chat_history(group_chat_id): 
             if(message.date.date()>yesterday):
                 continue
             if(message.date.date()<yesterday):
