@@ -174,7 +174,7 @@ async def main():
             refactor_quizSession(el)
         
 app.run(findWod())
-# app.run(main())
+app.run(main())
 
 userList=list(userMap.values())
 

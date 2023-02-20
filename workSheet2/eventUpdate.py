@@ -16,6 +16,7 @@ app = Client(
     api_hash = os.getenv('API_HASH')
 )
 group_chat_id=os.getenv('GROUP_CHAT_ID')
+joinByInvite='UNKNOWN-types.ChannelAdminLogEventActionParticipantJoinByInvite'
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 userMap={}
 activityList=[]
@@ -46,8 +47,8 @@ def makeList(userMap):
 
 async def scrap(activityList):        
     for event in reversed(activityList):
-        action=event.get('action').split('.')[1]
-        if action=='MEMBER_JOINED':
+        action=event.get('action').partition(".")[2]
+        if action=='MEMBER_JOINED' or action==joinByInvite:
             id=str(event['user'].get('id'))
             updateUser=await getUserInfo(user=event.get('user'),Date_of_Joining=event.get('date').split(' ')[0])
             if id in userMap.keys():
@@ -78,11 +79,12 @@ async def makeActivityList():
             if(event.date.date()<yesterday):
                 break
             event=json.loads(str(event))
-            action=event.get('action').split('.')[1]
-            if action=='MEMBER_JOINED' or action=='MEMBER_LEFT' or action=='USERNAME_CHANGED':
+            action=event.get('action').partition(".")[2]
+            if action=='MEMBER_JOINED' or action=='MEMBER_LEFT' or action=='USERNAME_CHANGED' or action==joinByInvite:
                 activityList.append(event)
             
         await scrap(activityList)
+
         async for message in app.get_chat_history(group_chat_id):
             if(message.date.date()>yesterday):
                 continue
