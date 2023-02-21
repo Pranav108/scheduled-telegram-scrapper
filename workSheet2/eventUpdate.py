@@ -17,9 +17,19 @@ app = Client(
 )
 group_chat_id=os.getenv('GROUP_CHAT_ID')
 joinByInvite='UNKNOWN-types.ChannelAdminLogEventActionParticipantJoinByInvite'
-yesterday = datetime.date.today() - datetime.timedelta(days=1)
+currentTime=datetime.datetime.now()
+today=datetime.date.today()
+isMorningShift=True
+yesterday = today - datetime.timedelta(days=1)
 userMap={}
 activityList=[]
+messageList=[]
+if(currentTime.hour>=12):
+    print('Scrapping for Evening Shift')
+    isMorningShift=False
+else:
+    print('Scrapping for Morning Shift')
+    
 with open(os.path.join(cur_path, 'userMaster.json')) as f:
    userMap = json.load(f)
     
@@ -44,7 +54,7 @@ def makeList(userMap):
         temp.insert(0,key)
         ans.append(temp)
     return ans
-
+ 
 async def scrap(activityList):        
     for event in reversed(activityList):
         action=event.get('action').partition(".")[2]
@@ -74,23 +84,32 @@ async def scrap(activityList):
 async def makeActivityList():
     async with app:
         async for event in app.get_chat_event_log(group_chat_id):
-            if(event.date.date()>yesterday):
-                continue
-            if(event.date.date()<yesterday):
-                break
+            if isMorningShift:
+                if(event.date.date()>yesterday):
+                    continue
+                if(event.date.date()<yesterday):
+                    break
+            else:
+                if(event.date.date()<today):
+                    break
             event=json.loads(str(event))
             action=event.get('action').partition(".")[2]
             if action=='MEMBER_JOINED' or action=='MEMBER_LEFT' or action=='USERNAME_CHANGED' or action==joinByInvite:
                 activityList.append(event)
             
         await scrap(activityList)
-
+            
         async for message in app.get_chat_history(group_chat_id):
-            if(message.date.date()>yesterday):
-                continue
-            if(message.date.date()<yesterday):
-                break
+            if isMorningShift:
+                if(message.date.date()>yesterday):
+                    continue
+                if(message.date.date()<yesterday):
+                    break
+            else:
+                if(message.date.date()<today):
+                    break
             message=json.loads(str(message))
+            messageList.append(message)
             user={}
             if 'from_user' in message:
                 user=message['from_user']
@@ -110,20 +129,22 @@ with open(os.path.join(cur_path, 'userMaster.json'), "w") as file:
     json.dump(userMap, file,indent=4)
 
 result=makeList(userMap)
+result=sorted(result, key = lambda x: x[3])
 
-DB.deleteTotalData('ST_User_Master')
-for el in result:
-    dataFormat={
-        'User_ID':el[0],
-        'FirstName_LastName':el[1],
-        'User_Name':el[2],
-        'Date_of_Joining':el[3],
-        'No.Date of Leaving':el[4],
-        'Last_Seen':el[5],
-        'Last Activity':el[6],
-    }
-    DB.send_data(dataFormat,'ST_User_Master')
-print('Data from User_Master_DB')
+if isMorningShift:
+    DB.deleteTotalData('ST_User_Master')
+    for el in result:
+        dataFormat={
+            'User_ID':el[0],
+            'FirstName_LastName':el[1],
+            'User_Name':el[2],
+            'Date_of_Joining':el[3],
+            'No.Date of Leaving':el[4],
+            'Last_Seen':el[5],
+            'Last Activity':el[6],
+        }
+        DB.send_data(dataFormat,'ST_User_Master')
+    print('Data from User_Master_DB')
 
 # PUSHING to SHEET
 result.insert(0,['User_ID','FirstName+LastName','User_Name','Date of Joining',	'Date of Leaving','	Last Seen',	'Last Activity'])
