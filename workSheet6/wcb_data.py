@@ -19,9 +19,13 @@ group_chat_id=os.getenv('GROUP_CHAT_ID')
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 messageList=[]
 sheetData=[]
+userMasterData={}
+with open('workSheet2/userMaster.json') as f:
+   userMasterData = json.load(f)
+
 async def main():
     async with app:
-        async for message in app.get_chat_history(group_chat_id): 
+        async for message in app.get_chat_history(group_chat_id):
             if(message.date.date()>yesterday):
                 continue
             if(message.date.date()<yesterday):
@@ -32,7 +36,7 @@ async def main():
                 typeOfUser='from_user'
             else:
                 typeOfUser='sender_chat'
-            if 'text' in message and '/start' in message['text'] and '@on9wordchainbot' in message['text']:
+            if 'text' in message and message['text'].startswith('/start') and message['text'].endswith("@on9wordchainbot"):
                 messageList.append(message)
             if message[typeOfUser].get('username')=='on9wordchainbot' and 'text' in message and ('Not enough players.' in message['text'] or 'Turn order:' in message['text'] ):
                 messageList.append(message)
@@ -41,26 +45,41 @@ async def main():
         messageListLength=len(messageList)
         messageList.reverse()
         while i<messageListLength:
-            messageText = messageList[i].get('text')
-            if '/start' in messageText and '@on9wordchainbot' in messageText:
+            typeOfOuterUser=''
+            if 'from_user' in messageList[i]:
+                typeOfOuterUser='from_user'
+            else:
+                typeOfOuterUser='sender_chat'
+            outerMessageText = messageList[i].get('text')
+            outerUser_ID = str(messageList[i][typeOfOuterUser].get('id'))
+            outerMsgDate = messageList[i].get('date')
+            if outerMessageText.startswith('/start') and outerMessageText.endswith("@on9wordchainbot"):
                 tempCounter=i+1
                 while(tempCounter<messageListLength):
                     msgObj=messageList[tempCounter]
+                    typeOfUser=''
                     if 'from_user' in msgObj:
                         typeOfUser='from_user'
                     else:
                         typeOfUser='sender_chat'
-                    messageText = msgObj.get('text')
-                    userID=msgObj[typeOfUser].get('id')
-                    msgDate=msgObj['date']
-                    if '/start' in messageText and '@on9wordchainbot' in messageText:
-                        sheetData.append([msgDate,userID,0,'N'])
-                    elif 'Not enough players.' in messageText:
-                        sheetData.append([msgDate,userID,1,'N'])
+                    innerMessageText = msgObj.get('text')
+                    innerUser_ID=str(msgObj[typeOfUser].get('id'))
+                    innerMsgDate=msgObj['date']
+                    InitiatedByUserName='NOT_FOUND'
+                    if innerMessageText.startswith('/start') and innerMessageText.endswith("@on9wordchainbot"):
+                        if innerUser_ID in userMasterData:
+                            InitiatedByUserName=userMasterData[innerUser_ID][0]
+                        sheetData.append([innerMsgDate,innerUser_ID,InitiatedByUserName,0,'N'])
+                    elif 'Not enough players.' in innerMessageText:
+                        if outerUser_ID in userMasterData:
+                            InitiatedByUserName=userMasterData[outerUser_ID][0]
+                        sheetData.append([outerMsgDate,outerUser_ID,InitiatedByUserName,1,'N'])
                         break
-                    elif 'Turn order:' in messageText:
+                    elif 'Turn order:' in innerMessageText:
                         playerCount=len(msgObj['entities'])-1
-                        sheetData.append([msgDate,userID,playerCount,'Y'])
+                        if outerUser_ID in userMasterData:
+                            InitiatedByUserName=userMasterData[outerUser_ID][0]
+                        sheetData.append([outerMsgDate,outerUser_ID,InitiatedByUserName,playerCount,'Y'])
                         break
                     else:
                         print('SOMETHING WIERD!!')
@@ -73,14 +92,14 @@ async def main():
 app.run(main())
 
 # PUSHING to DynamoDB
-print(sheetData)
 for el in sheetData:
     print(el)
     dataFormat={
         'Datetime':el[0],
         'WordChainBot_InitiatedByUser_ID':el[1],
-        'participantCount':el[2],
-        'Success':el[3],
+        'WordChainBot_InitiatedByUserName':el[2],
+        'participantCount':el[3],
+        'Success':el[4],
     }
     DB.send_data(dataFormat,'ST_WCB_Data')
 print('Data from WCB_Data_DB')

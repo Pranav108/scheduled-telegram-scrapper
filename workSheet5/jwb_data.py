@@ -10,6 +10,11 @@ from db.db_model import DynamoDB_con
 DB = DynamoDB_con()
 
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
+userMasterData={}
+
+with open('workSheet2/userMaster.json') as f:
+   userMasterData = json.load(f)
+
 def refactor(obj):
     timeStamp=obj['Datetime'].split('.')[0]
     Success='N'
@@ -17,7 +22,10 @@ def refactor(obj):
     JumbledWord_Participation=int(obj['JumbledWord_Participation'])
     if JumbledWord_Participation>1:
         Success='Y' 
-    return [timeStamp,JumbledWord_InitiatedByUser_ID,JumbledWord_Participation,Success]
+    fullName='NOT_FOUND'
+    if JumbledWord_InitiatedByUser_ID in userMasterData:
+        fullName=userMasterData[JumbledWord_InitiatedByUser_ID][0]
+    return [timeStamp,JumbledWord_InitiatedByUser_ID,fullName,JumbledWord_Participation,Success]
 
 # READING FROM DynamoDB
 yesterday=yesterday.strftime('%Y-%m-%d')
