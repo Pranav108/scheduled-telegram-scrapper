@@ -2,15 +2,37 @@ import boto3
 import os
 from boto3.dynamodb.conditions import Key
 from dotenv import load_dotenv
+import configparser
 load_dotenv()
 print('dynamodb connected!!....')
+
+config_data = configparser.ConfigParser()
+config_data.read("config.ini")
+tables = config_data["tables"]
+
+content_analysis=tables.get('content_analysis')
+user_master=tables.get('user_master')
+user_data=tables.get('user_data')
+telegram_master=tables.get('telegram_master')
+wcb_data=tables.get('wcb_data')
+jumbledword_bank=tables.get('jumbledword_bank')
+jumbledword_engagement=tables.get('jumbledword_engagement')
+quizbot_bank=tables.get('quizbot_bank')
+quizbot_engagement=tables.get('quizbot_engagement')
+quizbot_polls=tables.get('quizbot_polls')
+quizbot_session=tables.get('quizbot_session')
+storybuilding_bank=tables.get('storybuilding_bank')
+storybuilding_data=tables.get('storybuilding_data')
+temp_jumbledword_session=tables.get('temp_jumbledword_session')
+user_points=tables.get('user_points')
+
 dynamodb = boto3.resource(service_name=os.getenv('service_name'), region_name=os.getenv(
     'region_name'), aws_access_key_id=os.getenv('aws_access_key_id'), aws_secret_access_key=os.getenv('aws_secret_access_key'))
 existing_tables = [table.name for table in dynamodb.tables.all()]
 
-if 'UAT_Content_Analysis' not in existing_tables:
+if content_analysis not in existing_tables:
     dynamodb.create_table(
-        TableName='UAT_Content_Analysis',
+        TableName=content_analysis,
         KeySchema=[
             {
                 'AttributeName': 'Timing',
@@ -28,11 +50,11 @@ if 'UAT_Content_Analysis' not in existing_tables:
             'WriteCapacityUnits': 10
         }
     )
-    print('create table UAT_Content_Analysis')
+    print(f"created table {user_master}")
     
-if 'UAT_User_Master' not in existing_tables:
+if user_master not in existing_tables:
     dynamodb.create_table(
-        TableName='UAT_User_Master',
+        TableName=user_master,
         KeySchema=[
             {
                 'AttributeName': 'User_ID',
@@ -50,11 +72,11 @@ if 'UAT_User_Master' not in existing_tables:
             'WriteCapacityUnits': 10
         }
     )
-    print('create table UAT_User_Master')
+    print(f"created table {user_master}")
     
-if 'UAT_User_Data' not in existing_tables:
+if user_data not in existing_tables:
     dynamodb.create_table(
-        TableName='UAT_User_Data',
+        TableName=user_data,
         KeySchema=[
             {
                 'AttributeName': 'ID',
@@ -72,11 +94,11 @@ if 'UAT_User_Data' not in existing_tables:
             'WriteCapacityUnits': 10
         }
     )
-    print('create table UAT_User_Data')
+    print(f"created table {user_data}")
     
-if 'UAT_Telegram_Master' not in existing_tables:
+if telegram_master not in existing_tables:
     dynamodb.create_table(
-        TableName='UAT_Telegram_Master',
+        TableName=telegram_master,
         KeySchema=[
             {
                 'AttributeName': 'Date',
@@ -94,11 +116,11 @@ if 'UAT_Telegram_Master' not in existing_tables:
             'WriteCapacityUnits': 10
         }
     )
-    print('create table UAT_Telegram_Master')
+    print(f"created table {telegram_master}")
 
-if 'UAT_WCB_Data' not in existing_tables:
+if wcb_data not in existing_tables:
     dynamodb.create_table(
-        TableName='UAT_WCB_Data',
+        TableName=wcb_data,
         KeySchema=[
             {
                 'AttributeName': 'Datetime',
@@ -116,11 +138,11 @@ if 'UAT_WCB_Data' not in existing_tables:
             'WriteCapacityUnits': 10
         }
     )
-    print('create table UAT_WCB_Data')
+    print(f"created table {wcb_data}")
     
-if 'UAT_JumbledWord_bank' not in existing_tables:
+if jumbledword_bank not in existing_tables:
     dynamodb.create_table(
-        TableName='UAT_JumbledWord_bank',
+        TableName=jumbledword_bank,
         KeySchema=[
             {
                 'AttributeName': 'word',
@@ -138,11 +160,11 @@ if 'UAT_JumbledWord_bank' not in existing_tables:
             'WriteCapacityUnits': 10
         }
     )
-    print('create table UAT_JumbledWord_bank')
+    print(f"created table {jumbledword_bank}")
     
-if 'UAT_JumbledWord_Engagement' not in existing_tables:
+if jumbledword_engagement not in existing_tables:
     dynamodb.create_table(
-        TableName='UAT_JumbledWord_Engagement',
+        TableName=jumbledword_engagement,
         KeySchema=[
             {
                 'AttributeName': 'Date',
@@ -168,12 +190,12 @@ if 'UAT_JumbledWord_Engagement' not in existing_tables:
             'WriteCapacityUnits': 10
         }
     )
-    print('create table UAT_JumbledWord_Engagement')
+    print(f"created table {jumbledword_engagement}")
 
 # ADD INDEX KEY IN THIS TABLE
-if 'UAT_QuizBot_Bank' not in existing_tables:
+if quizbot_bank not in existing_tables:
     dynamodb.create_table(
-        TableName='UAT_QuizBot_Bank',
+        TableName=quizbot_bank,
         KeySchema=[
             {
                 'AttributeName': 'quiz_no',
@@ -191,11 +213,11 @@ if 'UAT_QuizBot_Bank' not in existing_tables:
             'WriteCapacityUnits': 10
         }
     )
-    print('create table UAT_QuizBot_Bank')
+    print(f"created table {quizbot_bank}")
     
-if 'UAT_QuizBot_Engagement' not in existing_tables:
+if quizbot_engagement not in existing_tables:
     dynamodb.create_table(
-        TableName='UAT_QuizBot_Engagement',
+        TableName=quizbot_engagement,
         KeySchema=[
             {
                 'AttributeName': 'quiz_no',
@@ -213,11 +235,11 @@ if 'UAT_QuizBot_Engagement' not in existing_tables:
             'WriteCapacityUnits': 10
         }
     )
-    print('create table UAT_QuizBot_Engagement')
+    print(f"created table {quizbot_engagement}")
     
-if 'UAT_QuizBot_Polls' not in existing_tables:
+if quizbot_polls not in existing_tables:
     dynamodb.create_table(
-        TableName='UAT_QuizBot_Polls',
+        TableName=quizbot_polls,
         KeySchema=[
             {
                 'AttributeName': 'poll_id',
@@ -235,11 +257,11 @@ if 'UAT_QuizBot_Polls' not in existing_tables:
             'WriteCapacityUnits': 10
         }
     )
-    print('create table UAT_QuizBot_Polls')
+    print(f"created table {quizbot_polls}")
     
-if 'UAT_QuizBot_Session' not in existing_tables:
+if quizbot_session not in existing_tables:
     dynamodb.create_table(
-        TableName='UAT_QuizBot_Session',
+        TableName=quizbot_session,
         KeySchema=[
             {
                 'AttributeName': 'quiz_no',
@@ -257,11 +279,11 @@ if 'UAT_QuizBot_Session' not in existing_tables:
             'WriteCapacityUnits': 10
         }
     )
-    print('create table UAT_QuizBot_Session')
+    print(f"created table {quizbot_session}")
 
-if 'UAT_StoryBuilding_Bank' not in existing_tables:
+if storybuilding_bank not in existing_tables:
     dynamodb.create_table(
-        TableName='UAT_StoryBuilding_Bank',
+        TableName=storybuilding_bank,
         KeySchema=[
             {
                 'AttributeName': 'prompt',
@@ -279,12 +301,12 @@ if 'UAT_StoryBuilding_Bank' not in existing_tables:
             'WriteCapacityUnits': 10
         }
     )
-    print('create table UAT_StoryBuilding_Bank')
+    print(f"created table {storybuilding_bank}")
 
 # ADD INDEX KEY AS DATE IN THIS TABLE
-if 'UAT_StoryBuilding_Data' not in existing_tables:
+if storybuilding_data not in existing_tables:
     dynamodb.create_table(
-        TableName='UAT_StoryBuilding_Data',
+        TableName=storybuilding_data,
         KeySchema=[
             {
                 'AttributeName': 'timestamp',
@@ -302,11 +324,11 @@ if 'UAT_StoryBuilding_Data' not in existing_tables:
             'WriteCapacityUnits': 10
         }
     )
-    print('create table UAT_StoryBuilding_Data')
+    print(f"created table {storybuilding_data}")
 
-if 'UAT_Temp_JumbledWord_Session' not in existing_tables:
+if temp_jumbledword_session not in existing_tables:
     dynamodb.create_table(
-        TableName='UAT_Temp_JumbledWord_Session',
+        TableName=temp_jumbledword_session,
         KeySchema=[
             {
                 'AttributeName': 'ID',
@@ -324,11 +346,11 @@ if 'UAT_Temp_JumbledWord_Session' not in existing_tables:
             'WriteCapacityUnits': 10
         }
     )
-    print('create table UAT_Temp_JumbledWord_Session')
+    print(f"created table {temp_jumbledword_session}")
 
-if 'UAT_User_Points' not in existing_tables:
+if user_points not in existing_tables:
     dynamodb.create_table(
-        TableName='UAT_User_Points',
+        TableName=user_points,
         KeySchema=[
             {
                 'AttributeName': 'User_id',
@@ -346,4 +368,4 @@ if 'UAT_User_Points' not in existing_tables:
             'WriteCapacityUnits': 10
         }
     )
-    print('create table UAT_User_Points')
+    print(f"created table {user_points}")
