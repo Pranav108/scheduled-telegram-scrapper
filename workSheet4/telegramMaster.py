@@ -4,9 +4,9 @@ load_dotenv()
 from pyrogram import Client
 import datetime
 import gspread
-
 import json
 sys.path.append(os.getcwd())
+from config import * 
 from db.db_model import DynamoDB_con
 DB = DynamoDB_con()
 app = Client(
@@ -101,8 +101,8 @@ dataFormat={
     'last_message_time':rowData[11],
     'Total_member_in_group':rowData[13],
 }
-DB.send_data(dataFormat,'ST_Telegram_Master')
-print('Data from Telegram_Master_DB')
+DB.send_data(dataFormat,telegram_master)
+print(f"Data from {telegram_master}")
 
 # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))

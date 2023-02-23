@@ -7,6 +7,7 @@ import datetime
 import gspread
 import json
 sys.path.append(os.getcwd())
+from config import * 
 from db.db_model import DynamoDB_con
 DB = DynamoDB_con()
 
@@ -20,8 +21,19 @@ yesterday = datetime.date.today() - datetime.timedelta(days=1)
 messageList=[]
 sheetData=[]
 userMasterData={}
-with open('workSheet2/userMaster.json') as f:
-   userMasterData = json.load(f)
+
+def refactored_obj(obj):
+    fullName=obj['Full_Name']
+    userName=obj['User_Name']
+    dateOfJoining=obj['Date_of_Joining']
+    dateOfLeaving=obj['Date_of_Leaving']
+    lastSeen=obj['Last_Seen']
+    lastActivity=obj['Last_Activity']
+    return [fullName,userName,dateOfJoining,dateOfLeaving,lastSeen,lastActivity]
+
+userMasterDataFromDB=DB.read_all_data(user_master)
+for el in userMasterDataFromDB:
+    userMasterData[str(el['User_ID'])]=refactored_obj(el)
 
 async def main():
     async with app:
@@ -90,7 +102,7 @@ async def main():
                 i=i+1
                             
 app.run(main())
-
+    
 # PUSHING to DynamoDB
 for el in sheetData:
     print(el)
@@ -101,8 +113,8 @@ for el in sheetData:
         'participantCount':el[3],
         'Success':el[4],
     }
-    DB.send_data(dataFormat,'ST_WCB_Data')
-print('Data from WCB_Data_DB')
+    DB.send_data(dataFormat,wcb_data)
+print(f"Data from {wcb_data}")
     
 # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))

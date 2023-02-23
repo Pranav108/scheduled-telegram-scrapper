@@ -6,14 +6,25 @@ import datetime
 import gspread
 import json
 sys.path.append(os.getcwd())
+from config import * 
 from db.db_model import DynamoDB_con
 DB = DynamoDB_con()
 
 userMasterData={}
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 
-with open('workSheet2/userMaster.json') as f:
-   userMasterData = json.load(f)
+def refactored_obj(obj):
+    fullName=obj['Full_Name']
+    userName=obj['User_Name']
+    dateOfJoining=obj['Date_of_Joining']
+    dateOfLeaving=obj['Date_of_Leaving']
+    lastSeen=obj['Last_Seen']
+    lastActivity=obj['Last_Activity']
+    return [fullName,userName,dateOfJoining,dateOfLeaving,lastSeen,lastActivity]
+
+sheetData=DB.read_all_data(user_master)
+for el in sheetData:
+    userMasterData[str(el['User_ID'])]=refactored_obj(el)
    
 def refactor(obj):
     timeStamp=obj['timestamp'].split('.')[0].replace('T',' ')
@@ -31,7 +42,7 @@ def refactor(obj):
 
 # READING FROM DynamoDB
 yesterday=yesterday.strftime('%Y-%m-%d')
-sheetData=DB.read_data('TB_StoryBuilding_Data','date',yesterday)
+sheetData=DB.read_data(storybuilding_data,'date',yesterday)
 sheetData=list(map(refactor,sheetData))
 sheetData.sort()
 

@@ -1,11 +1,12 @@
 import boto3
 from boto3.dynamodb.conditions import Key
 # from boto3.dynamodb.conditions import KeyConditionExpression,ExpressionAttributeValues
-import os
+import sys,os
 import datetime
 from dotenv import load_dotenv
+sys.path.append(os.getcwd())
+from config import * 
 load_dotenv()  # this is for the env file loading
-
 
 class DynamoDB_con():
     def __init__(self):
@@ -14,9 +15,18 @@ class DynamoDB_con():
     def send_data(self, data, tableName):
         db = self.dynamo_client.Table(tableName)
         db.put_item(Item=data)
+    def read_all_data(self, tableName):
+        table = self.dynamo_client.Table(tableName)
+        response=table.scan()
+        data = response['Items']
+        while 'LastEvaluatedKey' in response:
+            response = table.scan(
+                ExclusiveStartKey=response['LastEvaluatedKey'])
+            data.extend(response['Items'])
+        return data
     def read_data(self, tableName,keyValue,queryValue):
         table = self.dynamo_client.Table(tableName)
-        if tableName=='TB_StoryBuilding_Data':
+        if tableName==storybuilding_data:
             response=table.query(IndexName='date-index',KeyConditionExpression=Key(keyValue).eq(queryValue))
         else:
             response=table.query(KeyConditionExpression=Key(keyValue).eq(queryValue))

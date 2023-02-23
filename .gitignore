@@ -1,5 +1,4 @@
 # congit file for API)ID and API_HASH
-config.py
 .env
 
 # file to store bot credential for googleSheet

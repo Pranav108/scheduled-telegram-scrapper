@@ -6,8 +6,9 @@ import json
 import time
 import gspread
 import re
-from pyrogram import Client, enums
 sys.path.append(os.getcwd())
+from config import * 
+from pyrogram import Client, enums
 from db.db_model import DynamoDB_con
 DB = DynamoDB_con()
 
@@ -161,17 +162,17 @@ async def main():
          
         # to get JWB data
         yesterday_str=yesterday.strftime('%Y-%m-%d')
-        jwb_data=DB.read_data('TB_JumbledWord_Engagement','Date',yesterday_str)
+        jwb_data=DB.read_data(jumbledword_engagement,'Date',yesterday_str)
         for el in jwb_data:
             refactor_JWB(el)
             
         # to get StoryBuilding data
-        sbb_data=DB.read_data('TB_StoryBuilding_Data','date',yesterday_str)
+        sbb_data=DB.read_data(storybuilding_data,'date',yesterday_str)
         for el in sbb_data:
             refactor_SBB(el)
         
         # to get quizBot session
-        quizSession_data=DB.read_data('TB_QuizBot_Session','quiz_no',quiz_number)
+        quizSession_data=DB.read_data(quizbot_session,'quiz_no',quiz_number)
         for el in quizSession_data:
             refactor_quizSession(el)
         
@@ -200,8 +201,8 @@ for el in userList:
         'No._QuizQues_Attempted':el[10],
         'No._QuizQues_Correct':el[11],
     }
-    DB.send_data(dataFormat,'ST_User_Data')
-print('Data from User_Data_DB')
+    DB.send_data(dataFormat,user_data)
+print(f"Data from {user_data}")
 
 # # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))

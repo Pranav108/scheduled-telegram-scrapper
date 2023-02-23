@@ -5,6 +5,7 @@ from pyrogram import Client
 import datetime
 import json
 sys.path.append(os.getcwd())
+from config import * 
 from db.db_model import DynamoDB_con
 DB = DynamoDB_con()
 import gspread
@@ -30,9 +31,19 @@ if(currentTime.hour>=12):
 else:
     print('Scrapping for Morning Shift')
     
-with open(os.path.join(cur_path, 'userMaster.json')) as f:
-   userMap = json.load(f)
-    
+def refactored_obj(obj):
+    fullName=obj['Full_Name']
+    userName=obj['User_Name']
+    dateOfJoining=obj['Date_of_Joining']
+    dateOfLeaving=obj['Date_of_Leaving']
+    lastSeen=obj['Last_Seen']
+    lastActivity=obj['Last_Activity']
+    return [fullName,userName,dateOfJoining,dateOfLeaving,lastSeen,lastActivity]
+
+sheetData=DB.read_all_data(user_master)
+for el in sheetData:
+    userMap[str(el['User_ID'])]=refactored_obj(el)
+
 async def getUserInfo(user,Date_of_Joining=None,Date_of_Leaving=None):
     User_ID=user.get('id','NOT_AVL')
     User_Name=user.get('username','NOT_AVL')
@@ -124,27 +135,23 @@ async def makeActivityList():
                             
 app.run(makeActivityList())
 
-# PUSHING to JSON
-with open(os.path.join(cur_path, 'userMaster.json'), "w") as file:
-    json.dump(userMap, file,indent=4)
-
 result=makeList(userMap)
 result=sorted(result, key = lambda x: x[3])
 
 if isMorningShift:
-    DB.deleteTotalData('ST_User_Master')
+    DB.deleteTotalData(user_master)
     for el in result:
         dataFormat={
             'User_ID':el[0],
-            'FirstName_LastName':el[1],
+            'Full_Name':el[1],
             'User_Name':el[2],
             'Date_of_Joining':el[3],
-            'No.Date of Leaving':el[4],
+            'Date_of_Leaving':el[4],
             'Last_Seen':el[5],
-            'Last Activity':el[6],
+            'Last_Activity':el[6],
         }
-        DB.send_data(dataFormat,'ST_User_Master')
-    print('Data from User_Master_DB')
+        DB.send_data(dataFormat,user_master)
+print(f"Data from {user_master}")
 
 # PUSHING to SHEET
 result.insert(0,['User_ID','FirstName+LastName','User_Name','Date of Joining',	'Date of Leaving','	Last Seen',	'Last Activity'])

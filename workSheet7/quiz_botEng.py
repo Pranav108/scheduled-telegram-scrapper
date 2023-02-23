@@ -5,6 +5,7 @@ load_dotenv()
 import gspread
 import json
 sys.path.append(os.getcwd())
+from config import * 
 from db.db_model import DynamoDB_con
 DB = DynamoDB_con()
 quiz_number=0
@@ -25,7 +26,7 @@ def refactor(obj):
     return res
 
 # READING FROM DynamoDB
-sheetData=DB.read_data('TB_QuizBot_Engagement','quiz_no',quiz_number)
+sheetData=DB.read_data(quizbot_engagement,'quiz_no',quiz_number)
 sheetData=list(map(refactor,sheetData))
 
 with open('workSheet7/quiz_number.json', "w") as file:

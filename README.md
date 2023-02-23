@@ -34,6 +34,7 @@ In your .env file, set environment variables for the following:
 # TELEGRAM CREDENTIALS
 API_ID =
 API_HASH =
+GROUP_CHAT_ID =
 
 # GOOGLE SHEET ID
 SHEET_ID =

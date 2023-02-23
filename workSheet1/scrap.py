@@ -6,6 +6,7 @@ import datetime
 import gspread
 import json
 sys.path.append(os.getcwd())
+from config import * 
 from db.db_model import DynamoDB_con
 DB = DynamoDB_con()
 
@@ -87,8 +88,8 @@ dataFormat={
     'Total_Message_In_Day':useFull[31],
     'WCB_initiated_count_per_day':useFull[32]
 }
-DB.send_data(dataFormat,'ST_Content_Analysis')
-print('Data from Content_Analysis_DB')
+DB.send_data(dataFormat,content_analysis)
+print(f"Data from {content_analysis}")
 
 # PUSHING LOGIC
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))
