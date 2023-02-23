@@ -18,7 +18,7 @@ with open('workSheet2/userMaster.json') as f:
 def refactor(obj):
     timeStamp=obj['Datetime'].split('.')[0]
     Success='N'
-    JumbledWord_InitiatedByUser_ID=int(obj['JumbledWord_InitiatedByUser_ID'])
+    JumbledWord_InitiatedByUser_ID=str(obj['JumbledWord_InitiatedByUser_ID'])
     JumbledWord_Participation=int(obj['JumbledWord_Participation'])
     if JumbledWord_Participation>1:
         Success='Y' 

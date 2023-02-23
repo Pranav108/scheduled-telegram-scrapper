@@ -19,6 +19,7 @@ app = Client(
 cur_path = os.path.dirname(__file__)
 group_chat_id=os.getenv('GROUP_CHAT_ID')
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
+yesterday_str=yesterday.strftime('%Y-%m-%d')
 userList=[]
 messageList_ID=[]
 useFullMessage=[]
@@ -26,7 +27,7 @@ jwb_data=[]
 quiz_number=0
 wordOfTheDay='NO_WORD_YET'
 userMap={
-    -1001636582068:[yesterday.strftime("%x"),-1001636582068,0,'N',0,0,0,0,0,0,0,0]
+    -1001636582068:[yesterday_str,-1001636582068,0,'N',0,0,0,0,0,0,0,0]
     }
 
 with open('workSheet3/quiz_number.json') as f:
@@ -100,12 +101,13 @@ async def findWod():
 
 async def main():
     async with app:
+        global yesterday_str
         async for member in app.get_chat_members(group_chat_id):
             member=json.loads(str(member))
             userID=member['user'].get('id')                
             messageList_ID.append(userID)
         for id in messageList_ID:
-            userMap[id]=[yesterday.strftime("%x"),id,0,'N',0,0,0,0,0,0,0,0]
+            userMap[id]=[yesterday_str,id,0,'N',0,0,0,0,0,0,0,0]
         
         async for message in app.get_chat_history(group_chat_id): 
             if(message.date.date()>yesterday):
