@@ -62,7 +62,7 @@ def makeList(userMap):
     ans=[]
     for key in userMap:
         temp=userMap[key]
-        temp.insert(0,key)
+        temp.insert(0,int(key))
         ans.append(temp)
     return ans
  
@@ -142,7 +142,7 @@ if isMorningShift:
     DB.deleteTotalData(user_master)
     for el in result:
         dataFormat={
-            'User_ID':el[0],
+            'User_ID':str(el[0]),
             'Full_Name':el[1],
             'User_Name':el[2],
             'Date_of_Joining':el[3],

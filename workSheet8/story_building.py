@@ -38,7 +38,7 @@ def refactor(obj):
         print('cannot find user data in UserMaster')
     else:
         fullName=userMasterData[InitiatedByUser_ID][0]
-    return [timeStamp,InitiatedByUser_ID,fullName,participation_count,success]
+    return [timeStamp,int(InitiatedByUser_ID),fullName,participation_count,success]
 
 # READING FROM DynamoDB
 yesterday=yesterday.strftime('%Y-%m-%d')

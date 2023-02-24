@@ -36,7 +36,7 @@ def refactor(obj):
     fullName='NOT_FOUND'
     if JumbledWord_InitiatedByUser_ID in userMasterData:
         fullName=userMasterData[JumbledWord_InitiatedByUser_ID][0]
-    return [timeStamp,JumbledWord_InitiatedByUser_ID,fullName,JumbledWord_Participation,Success]
+    return [timeStamp,int(JumbledWord_InitiatedByUser_ID),fullName,JumbledWord_Participation,Success]
 
 # READING FROM DynamoDB
 yesterday=yesterday.strftime('%Y-%m-%d')

@@ -81,17 +81,17 @@ async def main():
                     if innerMessageText.startswith('/start') and innerMessageText.endswith("@on9wordchainbot"):
                         if innerUser_ID in userMasterData:
                             InitiatedByUserName=userMasterData[innerUser_ID][0]
-                        sheetData.append([innerMsgDate,innerUser_ID,InitiatedByUserName,0,'N'])
+                        sheetData.append([innerMsgDate,int(innerUser_ID),InitiatedByUserName,0,'N'])
                     elif 'Not enough players.' in innerMessageText:
                         if outerUser_ID in userMasterData:
                             InitiatedByUserName=userMasterData[outerUser_ID][0]
-                        sheetData.append([outerMsgDate,outerUser_ID,InitiatedByUserName,1,'N'])
+                        sheetData.append([outerMsgDate,int(outerUser_ID),InitiatedByUserName,1,'N'])
                         break
                     elif 'Turn order:' in innerMessageText:
                         playerCount=len(msgObj['entities'])-1
                         if outerUser_ID in userMasterData:
                             InitiatedByUserName=userMasterData[outerUser_ID][0]
-                        sheetData.append([outerMsgDate,outerUser_ID,InitiatedByUserName,playerCount,'Y'])
+                        sheetData.append([outerMsgDate,int(outerUser_ID),InitiatedByUserName,playerCount,'Y'])
                         break
                     else:
                         print('SOMETHING WIERD!!')
@@ -108,7 +108,7 @@ for el in sheetData:
     print(el)
     dataFormat={
         'Datetime':el[0],
-        'WordChainBot_InitiatedByUser_ID':el[1],
+        'WordChainBot_InitiatedByUser_ID':str(el[1]),
         'WordChainBot_InitiatedByUserName':el[2],
         'participantCount':el[3],
         'Success':el[4],
