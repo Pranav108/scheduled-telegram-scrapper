@@ -22,18 +22,9 @@ messageList=[]
 sheetData=[]
 userMasterData={}
 
-def refactored_obj(obj):
-    fullName=obj['Full_Name']
-    userName=obj['User_Name']
-    dateOfJoining=obj['Date_of_Joining']
-    dateOfLeaving=obj['Date_of_Leaving']
-    lastSeen=obj['Last_Seen']
-    lastActivity=obj['Last_Activity']
-    return [fullName,userName,dateOfJoining,dateOfLeaving,lastSeen,lastActivity]
-
 userMasterDataFromDB=DB.read_all_data(user_master)
 for el in userMasterDataFromDB:
-    userMasterData[str(el['User_ID'])]=refactored_obj(el)
+    userMasterData[str(el['User_ID'])]=el['Full_Name']
 
 async def main():
     async with app:
@@ -80,17 +71,17 @@ async def main():
                     InitiatedByUserName='NOT_FOUND'
                     if innerMessageText.startswith('/start') and innerMessageText.endswith("@on9wordchainbot"):
                         if innerUser_ID in userMasterData:
-                            InitiatedByUserName=userMasterData[innerUser_ID][0]
+                            InitiatedByUserName=userMasterData[innerUser_ID]
                         sheetData.append([innerMsgDate,int(innerUser_ID),InitiatedByUserName,0,'N'])
                     elif 'Not enough players.' in innerMessageText:
                         if outerUser_ID in userMasterData:
-                            InitiatedByUserName=userMasterData[outerUser_ID][0]
+                            InitiatedByUserName=userMasterData[outerUser_ID]
                         sheetData.append([outerMsgDate,int(outerUser_ID),InitiatedByUserName,1,'N'])
                         break
                     elif 'Turn order:' in innerMessageText:
                         playerCount=len(msgObj['entities'])-1
                         if outerUser_ID in userMasterData:
-                            InitiatedByUserName=userMasterData[outerUser_ID][0]
+                            InitiatedByUserName=userMasterData[outerUser_ID]
                         sheetData.append([outerMsgDate,int(outerUser_ID),InitiatedByUserName,playerCount,'Y'])
                         break
                     else:

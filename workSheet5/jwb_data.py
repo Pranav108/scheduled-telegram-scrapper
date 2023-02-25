@@ -13,18 +13,9 @@ DB = DynamoDB_con()
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 userMasterData={}
 
-def refactored_obj(obj):
-    fullName=obj['Full_Name']
-    userName=obj['User_Name']
-    dateOfJoining=obj['Date_of_Joining']
-    dateOfLeaving=obj['Date_of_Leaving']
-    lastSeen=obj['Last_Seen']
-    lastActivity=obj['Last_Activity']
-    return [fullName,userName,dateOfJoining,dateOfLeaving,lastSeen,lastActivity]
-
 sheetData=DB.read_all_data(user_master)
 for el in sheetData:
-    userMasterData[str(el['User_ID'])]=refactored_obj(el)
+    userMasterData[str(el['User_ID'])]=el['Full_Name']
 
 def refactor(obj):
     timeStamp=obj['Datetime'].split('.')[0]
@@ -35,7 +26,7 @@ def refactor(obj):
         Success='Y' 
     fullName='NOT_FOUND'
     if JumbledWord_InitiatedByUser_ID in userMasterData:
-        fullName=userMasterData[JumbledWord_InitiatedByUser_ID][0]
+        fullName=userMasterData[JumbledWord_InitiatedByUser_ID]
     return [timeStamp,int(JumbledWord_InitiatedByUser_ID),fullName,JumbledWord_Participation,Success]
 
 # READING FROM DynamoDB
