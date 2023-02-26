@@ -157,7 +157,7 @@ async def main():
         useFullMessage.reverse()
         while i<len(useFullMessage):
             i,result,user_id=checkValid(i,useFullMessage)
-            if result:
+            if result and user_id in userMap:
                 userMap[user_id][4]=userMap[user_id][4]+1
          
         # to get JWB data
