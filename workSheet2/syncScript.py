@@ -1,20 +1,13 @@
 import sys,os
 from dotenv import load_dotenv
 load_dotenv()
-from pyrogram import Client
 import datetime
 import gspread
 import json
 sys.path.append(os.getcwd())
-from db.db_model import DynamoDB_con
-DB = DynamoDB_con()
+from config import * 
 
 cur_path = os.path.dirname(__file__)
-app = Client(
-    "YOUR_BOT",
-    api_id = os.getenv('API_ID'),
-    api_hash = os.getenv('API_HASH')
-)
 group_chat_id=os.getenv('GROUP_CHAT_ID')
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 messageList=[]

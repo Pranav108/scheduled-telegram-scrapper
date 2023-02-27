@@ -7,16 +7,9 @@ import time
 import gspread
 import re
 sys.path.append(os.getcwd())
-from tableConfigHelper import * 
-from pyrogram import Client, enums
-from db.db_model import DynamoDB_con
-DB = DynamoDB_con()
+from pyrogram import enums
+from config import * 
 
-app = Client(
-    "YOUR_BOT",
-    api_id = os.getenv('API_ID'),
-    api_hash = os.getenv('API_HASH')
-)
 cur_path = os.path.dirname(__file__)
 group_chat_id=os.getenv('GROUP_CHAT_ID')
 yesterday = datetime.date.today() - datetime.timedelta(days=1)

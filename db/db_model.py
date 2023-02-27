@@ -4,9 +4,11 @@ from boto3.dynamodb.conditions import Key
 import sys,os
 import datetime
 from dotenv import load_dotenv
-sys.path.append(os.getcwd())
-from tableConfigHelper import * 
 load_dotenv()  # this is for the env file loading
+sys.path.append(os.getcwd())
+storybuilding_data=os.getenv('storybuilding_data')
+quizbot_engagement=os.getenv('quizbot_engagement')
+quizbot_session=os.getenv('quizbot_session')
 
 class DynamoDB_con():
     def __init__(self):

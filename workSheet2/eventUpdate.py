@@ -1,21 +1,13 @@
 import sys,os
 from dotenv import load_dotenv
 load_dotenv()
-from pyrogram import Client
 import datetime
 import json
-sys.path.append(os.getcwd())
-from tableConfigHelper import * 
-from db.db_model import DynamoDB_con
-DB = DynamoDB_con()
 import gspread
+sys.path.append(os.getcwd())
+from config import * 
 
 cur_path = os.path.dirname(__file__)
-app = Client(
-    "YOUR_BOT",
-    api_id = os.getenv('API_ID'),
-    api_hash = os.getenv('API_HASH')
-)
 group_chat_id=os.getenv('GROUP_CHAT_ID')
 joinByInvite='UNKNOWN-types.ChannelAdminLogEventActionParticipantJoinByInvite'
 currentTime=datetime.datetime.now()

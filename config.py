@@ -1,7 +1,10 @@
 import sys,os
 from dotenv import load_dotenv
 load_dotenv()
-
+from pyrogram import Client
+from db.db_model import DynamoDB_con
+DB = DynamoDB_con()
+app = Client("YOUR_BOT")
 content_analysis=os.getenv('content_analysis')
 user_master=os.getenv('user_master')
 user_data=os.getenv('user_data')

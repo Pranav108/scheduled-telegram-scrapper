@@ -1,19 +1,12 @@
 import sys,os
 from dotenv import load_dotenv
 load_dotenv()
-from pyrogram import Client
 import datetime
 import gspread
 import json
 sys.path.append(os.getcwd())
-from tableConfigHelper import * 
-from db.db_model import DynamoDB_con
-DB = DynamoDB_con()
-app = Client(
-    "YOUR_BOT",
-    api_id = os.getenv('API_ID'),
-    api_hash = os.getenv('API_HASH')
-)
+from config import * 
+
 group_chat_id=os.getenv('GROUP_CHAT_ID')
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
 memberList=[]
@@ -61,14 +54,14 @@ async def main():
         global JWB_initiatedCount,SBB_initiatedCount
         yesterday_str=yesterday.strftime('%Y-%m-%d')
         # to get JumbledWordBot data
-        jwb_data=DB.read_data('TB_JumbledWord_Engagement','Date',yesterday_str)
+        jwb_data=DB.read_data(jumbledword_engagement,'Date',yesterday_str)
         for el in jwb_data:
             participants_count=int(el['JumbledWord_Participation'])
             if participants_count>1:
                 JWB_initiatedCount=JWB_initiatedCount+1
             
         # to get StoryBuilding data
-        sbb_data=DB.read_data('TB_StoryBuilding_Data','date',yesterday_str)
+        sbb_data=DB.read_data(storybuilding_data,'date',yesterday_str)
         for el in sbb_data:
             participants_count=int(el['n_participants'])
             if participants_count>1:

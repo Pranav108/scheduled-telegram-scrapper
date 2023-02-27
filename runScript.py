@@ -2,6 +2,7 @@ import schedule
 import os
 import time
 import db.create_db
+from config import * 
 from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
@@ -42,20 +43,20 @@ def storyBuilding():
 
 def parentCaller():
     contentAnalysis()
-    # time.sleep(20)
-    # user_Master()
-    # time.sleep(20)
-    # user_Data()
-    # time.sleep(20)
-    # telegram_Master()
-    # time.sleep(20)
-    # JWB_Data()
-    # time.sleep(20)
-    # WCB_Data()
-    # time.sleep(20)
-    # quizBotEngagement()
-    # time.sleep(20)
-    # storyBuilding()
+    time.sleep(20)
+    user_Master()
+    time.sleep(20)
+    user_Data()
+    time.sleep(20)
+    telegram_Master()
+    time.sleep(20)
+    JWB_Data()
+    time.sleep(20)
+    WCB_Data()
+    time.sleep(20)
+    quizBotEngagement()
+    time.sleep(20)
+    storyBuilding()
     print('All sheet updated')
     
 schedule.every().day.at(os.getenv('running_time')).do(parentCaller)

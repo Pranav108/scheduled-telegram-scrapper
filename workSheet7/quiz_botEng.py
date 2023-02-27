@@ -6,11 +6,9 @@ import datetime
 import gspread
 import json
 sys.path.append(os.getcwd())
-from tableConfigHelper import * 
-from db.db_model import DynamoDB_con
-DB = DynamoDB_con()
-yesterday = datetime.date.today() - datetime.timedelta(days=1)
+from config import * 
 
+yesterday = datetime.date.today() - datetime.timedelta(days=1)
 def refactor(obj):
     quizNumber=int(obj['quiz_no'])
     Date=obj['date']
