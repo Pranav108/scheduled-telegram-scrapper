@@ -2,20 +2,18 @@ import sys,os
 from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
+import datetime
 import gspread
 import json
 sys.path.append(os.getcwd())
 from config import * 
 from db.db_model import DynamoDB_con
 DB = DynamoDB_con()
-quiz_number=0
-
-with open('workSheet7/quiz_number.json') as f:
-   quiz_number = json.load(f)[0]+1
+yesterday = datetime.date.today() - datetime.timedelta(days=1)
 
 def refactor(obj):
     quizNumber=int(obj['quiz_no'])
-    Date=obj['timestamp'].split('.')[0].split('T')[0]
+    Date=obj['date']
     correctAnswers=obj['correct_answers']
     quizEngagement=obj['engagement']
     res=[Date,quizNumber]
@@ -26,11 +24,9 @@ def refactor(obj):
     return res
 
 # READING FROM DynamoDB
-sheetData=DB.read_data(quizbot_engagement,'quiz_no',quiz_number)
+yesterday_str=yesterday.strftime('%Y-%m-%d')
+sheetData=DB.read_data(quizbot_engagement,'date',yesterday_str)
 sheetData=list(map(refactor,sheetData))
-
-with open('workSheet7/quiz_number.json', "w") as file:
-    json.dump([quiz_number], file,indent=4)
 
 # PUSHING to SHEET
 gc = gspread.service_account(filename=os.path.join(os.getcwd() +'/secret-key.json'))

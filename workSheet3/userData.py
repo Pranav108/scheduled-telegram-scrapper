@@ -30,9 +30,6 @@ wordOfTheDay='NO_WORD_YET'
 userMap={
     -1001636582068:[yesterday_str,-1001636582068,0,'N',0,0,0,0,0,0,0,0]
     }
-
-with open('workSheet3/quiz_number.json') as f:
-   quiz_number = json.load(f)[0]+1
    
 def refactor_JWB(obj):
     JumbledWord_InitiatedByUser_ID=int(obj['JumbledWord_InitiatedByUser_ID'])
@@ -172,7 +169,7 @@ async def main():
             refactor_SBB(el)
         
         # to get quizBot session
-        quizSession_data=DB.read_data(quizbot_session,'quiz_no',quiz_number)
+        quizSession_data=DB.read_data(quizbot_session,'date',yesterday_str)
         for el in quizSession_data:
             refactor_quizSession(el)
         
@@ -180,9 +177,6 @@ app.run(findWod())
 app.run(main())
 
 userList=list(userMap.values())
-
-with open('workSheet3/quiz_number.json', "w") as file:
-    json.dump([quiz_number], file,indent=4)
         
 # PUSHING to DynamoDB
 for el in userList:

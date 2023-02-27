@@ -26,7 +26,7 @@ class DynamoDB_con():
         return data
     def read_data(self, tableName,keyValue,queryValue):
         table = self.dynamo_client.Table(tableName)
-        if tableName==storybuilding_data:
+        if tableName==storybuilding_data or tableName==quizbot_engagement or tableName==quizbot_session:
             response=table.query(IndexName='date-index',KeyConditionExpression=Key(keyValue).eq(queryValue))
         else:
             response=table.query(KeyConditionExpression=Key(keyValue).eq(queryValue))
