@@ -4,7 +4,7 @@ from boto3.dynamodb.conditions import Key
 from dotenv import load_dotenv
 load_dotenv()
 sys.path.append(os.getcwd())
-from config import * 
+from tableConfigHelper import * 
 print('dynamodb connected!!....')
 
 dynamodb = boto3.resource(service_name=os.getenv('service_name'), region_name=os.getenv(

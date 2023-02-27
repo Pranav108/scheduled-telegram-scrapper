@@ -5,7 +5,7 @@ import sys,os
 import datetime
 from dotenv import load_dotenv
 sys.path.append(os.getcwd())
-from config import * 
+from tableConfigHelper import * 
 load_dotenv()  # this is for the env file loading
 
 class DynamoDB_con():

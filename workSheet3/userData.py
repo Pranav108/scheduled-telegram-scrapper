@@ -7,7 +7,7 @@ import time
 import gspread
 import re
 sys.path.append(os.getcwd())
-from config import * 
+from tableConfigHelper import * 
 from pyrogram import Client, enums
 from db.db_model import DynamoDB_con
 DB = DynamoDB_con()

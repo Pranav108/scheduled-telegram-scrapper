@@ -6,7 +6,7 @@ import datetime
 import gspread
 import json
 sys.path.append(os.getcwd())
-from config import * 
+from tableConfigHelper import * 
 from db.db_model import DynamoDB_con
 DB = DynamoDB_con()
 yesterday = datetime.date.today() - datetime.timedelta(days=1)
