@@ -1,6 +1,7 @@
 import schedule
 import os
 import time
+import datetime
 import db.create_db
 from config import * 
 from pathlib import Path
@@ -41,22 +42,27 @@ def storyBuilding():
     workSheet8 = os.path.join(root_cur_path, 'workSheet8/story_building.py')
     os.system('python ' + workSheet8)
 
+currentTime=datetime.datetime.now()
+today=datetime.date.today()
+
+
 def parentCaller():
-    contentAnalysis()
     time.sleep(20)
     user_Master()
-    time.sleep(20)
-    user_Data()
-    time.sleep(20)
-    telegram_Master()
-    time.sleep(20)
-    JWB_Data()
-    time.sleep(20)
-    WCB_Data()
-    time.sleep(20)
-    quizBotEngagement()
-    time.sleep(20)
-    storyBuilding()
+    if(currentTime.hour<12):
+        contentAnalysis()
+        time.sleep(20)
+        user_Data()
+        time.sleep(20)
+        telegram_Master()
+        time.sleep(20)
+        JWB_Data()
+        time.sleep(20)
+        WCB_Data()
+        time.sleep(20)
+        quizBotEngagement()
+        time.sleep(20)
+        storyBuilding()
     print('All sheet updated')
     
 schedule.every().day.at(os.getenv('running_time')).do(parentCaller)
